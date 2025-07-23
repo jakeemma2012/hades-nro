@@ -484,7 +484,6 @@ public class InventoryService {
                 Service.getInstance().removeTitle(player);
             }
             player.inventory.itemsBody.set(index, putItemBag(player, item));
-
             sendItemBags(player);
             sendItemBody(player);
             Service.getInstance().Send_Caitrang(player);
@@ -1006,6 +1005,7 @@ public class InventoryService {
             player.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -17,7 +17,7 @@ public class Bill extends Npc {
         if (canOpenNpc(player)) {
             switch (this.mapId) {
                 case 48:
-                    if (player.setClothes.godClothes == 5) {
+                    if (player.setClothes.godClothes < 5) {
                         this.createOtherMenu(player, ConstNpc.IGNORE_MENU,
                                 "Ngươi hãy mang 5 món thần linh\nvà x99 thức ăn đến đây...\nrồi ta nói tiếp",
                                 "Từ chối");

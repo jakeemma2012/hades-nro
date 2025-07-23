@@ -107,7 +107,6 @@ public class Input {
                         player.inventory.addGold(500000000);
                         count++;
                     }
-                    player.pointThoiVang += count;
                     InventoryService.gI().subQuantityItemsBag(player, tv, count);
                     Service.getInstance().sendMoney(player);
                     InventoryService.gI().sendItemBags(player);

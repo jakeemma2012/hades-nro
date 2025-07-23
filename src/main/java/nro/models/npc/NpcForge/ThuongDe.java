@@ -16,6 +16,7 @@ import nro.server.io.Message;
 import nro.services.InventoryService;
 import nro.services.NpcService;
 import nro.services.Service;
+import nro.services.func.ChangeMapService;
 import nro.services.func.Input;
 import nro.services.func.LuckyRoundService;
 import nro.services.func.ShopService;
@@ -34,7 +35,7 @@ public class ThuongDe extends Npc {
                     this.createOtherMenu(player, ConstNpc.BASE_MENU,
                             "Con muốn thực hiện quay vòng quay sao ?\n"
                                     + "Con đang có tổng thực hiện " + player.pointVongQuayThuongDe + " lần quay",
-                            "Quay số\nmay mắn", "Top\n vòng quay", "Mốc \n vòng quay");
+                            "Quay số\nmay mắn", "Top\n vòng quay", "Mốc \n vòng quay","Đến Kaio");
                     break;
                 case ConstMap.CON_DUONG_RAN_DOC:
                     if (player.zone instanceof ZSnakeRoad) {
@@ -75,6 +76,9 @@ public class ThuongDe extends Npc {
                             break;
                         case 2:
                             this.OpenMocRewards(player);
+                            break;
+                        case 3:
+                            ChangeMapService.gI().changeMapBySpaceShip(player,48,-1,372);
                             break;
                         // case 1:
                         // ChangeMapService.gI().changeMapBySpaceShip(player, 48, -1, 354);

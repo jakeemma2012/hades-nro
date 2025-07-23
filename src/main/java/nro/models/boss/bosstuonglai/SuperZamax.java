@@ -15,6 +15,7 @@ public class SuperZamax extends Boss {
 
     @Override
     public void rewards(Player pl) {
+        getRewardBlack(this,pl,100,100);
     }
 
     @Override
@@ -40,19 +41,7 @@ public class SuperZamax extends Boss {
 
     @Override
     public void leaveMap() {
-        Boss blackGoku = null;
-
-        switch (this.zone.map.mapId) {
-            case 92:
-                blackGoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU);
-                break;
-            case 93:
-                blackGoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU_1);
-                break;
-            case 94:
-                blackGoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU_2);
-                break;
-        }
+        Boss blackGoku = BossManager.gI().getBossById((int)this.parent.id);
 
         if (blackGoku != null) {
             blackGoku.setJustRest();

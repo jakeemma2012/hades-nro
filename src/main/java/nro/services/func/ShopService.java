@@ -525,32 +525,40 @@ public class ShopService {
                             Item meal = InventoryService.gI().findMealChangeDestroyClothes(player);
                             if (meal != null) {
                                 Item item = ItemService.gI().createItemFromItemShop(is);
-                                int param = 0;
-                                if (Util.isTrue(2, 10)) {
-                                    param = Util.nextInt(10, 15);
-                                } else if (Util.isTrue(3, 10)) {
-                                    param = Util.nextInt(0, 10);
-                                }
-                                for (ItemOption io : item.itemOptions) {
-                                    int optId = io.optionTemplate.id;
-                                    switch (optId) {
-                                        case 47: // giáp
-                                        case 6: // hp
-                                        case 26: // hp/30s
-                                        case 22: // hp k
-                                        case 0: // sức đánh
-                                        case 7: // ki
-                                        case 28: // ki/30s
-                                        case 23: // ki k
-                                        case 14: // crit
-                                            io.param += ((long) io.param * param / 100);
-                                            break;
+                                if(player.inventory.itemsBody.get(item.getType()) != null){
+                                    int param = 0;
+                                    if (Util.isTrue(2, 10)) {
+                                        param = Util.nextInt(10, 15);
+                                    } else if (Util.isTrue(3, 10)) {
+                                        param = Util.nextInt(0, 10);
                                     }
+                                    for (ItemOption io : item.itemOptions) {
+                                        int optId = io.optionTemplate.id;
+                                        switch (optId) {
+                                            case 47: // giáp
+                                            case 6: // hp
+                                            case 26: // hp/30s
+                                            case 22: // hp k
+                                            case 0: // sức đánh
+                                            case 7: // ki
+                                            case 28: // ki/30s
+                                            case 23: // ki k
+                                            case 14: // crit
+                                                io.param += ((long) io.param * param / 100);
+                                                break;
+                                        }
+                                    }
+                                    InventoryService.gI().subQuantityItemsBody(player,player.inventory.itemsBody.get(item.getType()),1);
+                                    InventoryService.gI().subQuantityItemsBag(player, meal, 99);
+                                    InventoryService.gI().addItemBag(player, item, 99);
+                                    InventoryService.gI().sendItemBags(player);
+                                    InventoryService.gI().sendItemBody(player);
+                                    Service.getInstance().sendThongBao(player, "Đổi thành công " + is.temp.name);
+                                    player.setClothes.setup();
+                                } else {
+                                    Service.getInstance().sendThongBao(player,"Bạn đang không mặc đúng đủ 5 món?");
+                                    return;
                                 }
-                                InventoryService.gI().subQuantityItemsBag(player, meal, 99);
-                                InventoryService.gI().addItemBag(player, item, 99);
-                                InventoryService.gI().sendItemBags(player);
-                                Service.getInstance().sendThongBao(player, "Đổi thành công " + is.temp.name);
                             } else {
                                 Service.getInstance().sendThongBao(player, "Yêu cầu có 99 thức ăn");
                                 return;
@@ -905,9 +913,10 @@ public class ShopService {
 
             switch (item.template.id) {
                 case 457:
-                    UseItem.gI().closeTab(pl);
-                    UseItem.gI().closeTab(pl);
-                    Input.gI().ceateFormBanThoiVang(pl);
+//                    UseItem.gI().closeTab(pl);
+//                    UseItem.gI().closeTab(pl);
+//                    Input.gI().ceateFormBanThoiVang(pl);
+                    Service.getInstance().sendThongBao(pl,"Không thể bán vật phẩm này!");
                     return;
                 case 2011:
                     goldReceive = COST_LOCK_GOLD_BAR;
@@ -950,8 +959,8 @@ public class ShopService {
             int goldReceive = 0;
             switch (item.template.id) {
                 case 457:
-                    goldReceive = COST_GOLD_BAR;
-                    break;
+                    Service.getInstance().sendThongBao(pl,"Không thể bán thỏi vàng !");
+                    return;
                 case 2011:
                     goldReceive = COST_LOCK_GOLD_BAR;
                     break;

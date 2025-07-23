@@ -11,6 +11,7 @@ import nro.models.item.ItemOption;
 import nro.models.map.*;
 import nro.models.map.dungeon.zones.ZSnakeRoad;
 import nro.models.map.war.NamekBallWar;
+import nro.models.npc.NpcFactory;
 import nro.models.player.Inventory;
 import nro.models.player.MiniPet;
 import nro.models.player.Player;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import nro.models.boss.BossManager;
 import nro.models.npc.specialnpc.EggLinhThu;
 import nro.models.npc.specialnpc.MabuEgg;
@@ -112,8 +114,7 @@ public class UseItem {
             player.setClanMember();
             Service.getInstance().point(player);
         } catch (Exception e) {
-            Log.error(UseItem.class, e);
-
+            e.printStackTrace();
         }
     }
 
@@ -653,7 +654,8 @@ public class UseItem {
 
     private void UseThoiVang(Player player) {
         closeTab(player);
-        Input.gI().ceateFormBanThoiVang(player);
+        NpcService.gI().createMenuConMeo(player, ConstNpc.NPC_BAN_VANG, 0, "|2|Bạn muốn sử dụng bao nhiêu thỏi vàng?",
+                "X1", "X10", "X20", "Đóng");
     }
 
     private void findNamekBall(Player pl, Item item) {
@@ -677,8 +679,8 @@ public class UseItem {
         }
         final Inventory inventory = pl.inventory;
         MenuDialog menu = new MenuDialog(sb.toString(),
-                new String[] { "Đến ngay\nViên " + (star + 1) + " Sao\n 50tr Vàng",
-                        "Đến ngay\nViên " + (star + 1) + " Sao\n 5 Hồng ngọc" },
+                new String[]{"Đến ngay\nViên " + (star + 1) + " Sao\n 50tr Vàng",
+                        "Đến ngay\nViên " + (star + 1) + " Sao\n 5 Hồng ngọc"},
                 new MenuRunable() {
                     @Override
                     public void run() {
@@ -863,14 +865,14 @@ public class UseItem {
                         rdOption.add(1, new ItemOption(50, 15));// %hp
                         newItem.itemOptions.add(rdOption.next());
                     }
-                        break;
+                    break;
 
                     case ConstItem.HO_MAP_VANG: {
                         newItem.itemOptions.add(new ItemOption(77, Util.nextInt(10, 20)));
                         newItem.itemOptions.add(new ItemOption(103, Util.nextInt(10, 20)));
                         newItem.itemOptions.add(new ItemOption(50, Util.nextInt(10, 20)));
                     }
-                        break;
+                    break;
 
                     case ConstItem.NON_HO_VANG:
                     case ConstItem.CAI_TRANG_HO_VANG:
@@ -919,21 +921,21 @@ public class UseItem {
             Item itemReward = null;
             int param = item.itemOptions.get(0).param;
             int gold = 0;
-            int[] listItem = { 441, 442, 443, 444, 445, 446, 447, 457, 457, 457, 223, 224, 225 };
+            int[] listItem = {441, 442, 443, 444, 445, 446, 447, 457, 457, 457, 223, 224, 225};
             int[] listClothesReward;
             int[] listItemReward;
             String text = "Bạn nhận được\n";
             if (param < 8) {
                 gold = 100000000 * param;
-                listClothesReward = new int[] { randClothes(param) };
+                listClothesReward = new int[]{randClothes(param)};
                 listItemReward = Util.pickNRandInArr(listItem, 3);
             } else if (param < 10) {
                 gold = 120000000 * param;
-                listClothesReward = new int[] { randClothes(param), randClothes(param) };
+                listClothesReward = new int[]{randClothes(param), randClothes(param)};
                 listItemReward = Util.pickNRandInArr(listItem, 4);
             } else {
                 gold = 150000000 * param;
-                listClothesReward = new int[] { randClothes(param), randClothes(param), randClothes(param) };
+                listClothesReward = new int[]{randClothes(param), randClothes(param), randClothes(param)};
                 listItemReward = Util.pickNRandInArr(listItem, 5);
                 int ruby = Util.nextInt(1, 5);
                 pl.inventory.ruby += ruby;
@@ -943,9 +945,9 @@ public class UseItem {
                 itemReward = ItemService.gI().createNewItem((short) i);
                 RewardService.gI().initBaseOptionClothes(itemReward.template.id, itemReward.template.type,
                         itemReward.itemOptions);
-                RewardService.gI().initStarOption(itemReward, new RewardService.RatioStar[] {
+                RewardService.gI().initStarOption(itemReward, new RewardService.RatioStar[]{
                         new RewardService.RatioStar((byte) 1, 1, 2), new RewardService.RatioStar((byte) 2, 1, 3),
-                        new RewardService.RatioStar((byte) 3, 1, 4), new RewardService.RatioStar((byte) 4, 1, 5), });
+                        new RewardService.RatioStar((byte) 3, 1, 4), new RewardService.RatioStar((byte) 4, 1, 5),});
                 InventoryService.gI().addItemBag(pl, itemReward, 0);
                 pl.textRuongGo.add(text + itemReward.getInfoItem());
             }
@@ -958,7 +960,7 @@ public class UseItem {
             }
             if (param == 11) {
                 if (Util.isTrue(10, 90)) {
-                    int[] itemDos = new int[] { 556, 558, 560 };
+                    int[] itemDos = new int[]{556, 558, 560};
                     int randomDo = new Random().nextInt(itemDos.length);
                     itemReward = ItemService.gI().createNewItem((short) itemDos[randomDo]);
                 } else {
@@ -1079,10 +1081,10 @@ public class UseItem {
     public void hopQuaTanThu(Player pl, Item it) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 14) {
             int gender = pl.gender;
-            int[] id = { gender, 6 + gender, 21 + gender, 27 + gender, 12, 194, 441, 442, 443, 444, 445, 446, 447 };
-            int[] soluong = { 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10 };
-            int[] option = { 0, 0, 0, 0, 0, 73, 95, 96, 97, 98, 99, 100, 101 };
-            int[] param = { 0, 0, 0, 0, 0, 0, 5, 5, 5, 3, 3, 5, 5 };
+            int[] id = {gender, 6 + gender, 21 + gender, 27 + gender, 12, 194, 441, 442, 443, 444, 445, 446, 447};
+            int[] soluong = {1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 10};
+            int[] option = {0, 0, 0, 0, 0, 73, 95, 96, 97, 98, 99, 100, 101};
+            int[] param = {0, 0, 0, 0, 0, 0, 5, 5, 5, 3, 3, 5, 5};
             int arrLength = id.length - 1;
 
             for (int i = 0; i < arrLength; i++) {
@@ -1099,7 +1101,7 @@ public class UseItem {
                 }
             }
 
-            int[] idpet = { 916, 917, 918, 942, 943, 944, 1046, 1039, 1040 };
+            int[] idpet = {916, 917, 918, 942, 943, 944, 1046, 1039, 1040};
 
             Item item = ItemService.gI().createNewItem((short) idpet[Util.nextInt(0, idpet.length - 1)]);
             item.itemOptions.add(new ItemOption(50, Util.nextInt(5, 10)));
@@ -1118,8 +1120,8 @@ public class UseItem {
 
     private void openbox2010(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            short[] temp = { 17, 16, 15, 675, 676, 677, 678, 679, 680, 681, 580, 581, 582 };
-            int[][] gold = { { 5000, 20000 } };
+            short[] temp = {17, 16, 15, 675, 676, 677, 678, 679, 680, 681, 580, 581, 582};
+            int[][] gold = {{5000, 20000}};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
             icon[0] = item.template.iconID;
@@ -1130,7 +1132,7 @@ public class UseItem {
                 it.itemOptions.add(new ItemOption(73, 0));
 
             } else if (temp[index] >= 580 && temp[index] <= 582 || temp[index] >= 675 && temp[index] <= 681) { // cải
-                                                                                                               // trang
+                // trang
 
                 it.itemOptions.add(new ItemOption(77, Util.nextInt(20, 30)));
                 it.itemOptions.add(new ItemOption(103, Util.nextInt(20, 30)));
@@ -1161,8 +1163,8 @@ public class UseItem {
 
     private void capsule8thang3(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            short[] temp = { 17, 16, 675, 676, 677, 678, 679, 680, 681, 580, 581, 582, 1154, 1155, 1156, 860, 1041,
-                    1042, 1043, 954, 955 };
+            short[] temp = {17, 16, 675, 676, 677, 678, 679, 680, 681, 580, 581, 582, 1154, 1155, 1156, 860, 1041,
+                    1042, 1043, 954, 955};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
             icon[0] = item.template.iconID;
@@ -1220,8 +1222,8 @@ public class UseItem {
                 case 1:
                     if (Manager.EVENT_SEVER == idsukien) {
                         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-                            short[] temp = { 16, 15, 865, 999, 1000, 1001, 739, 742, 743 };
-                            int[][] gold = { { 5000, 20000 } };
+                            short[] temp = {16, 15, 865, 999, 1000, 1001, 739, 742, 743};
+                            int[][] gold = {{5000, 20000}};
                             byte index = (byte) Util.nextInt(0, temp.length - 1);
                             short[] icon = new short[2];
                             icon[0] = item.template.iconID;
@@ -1313,7 +1315,7 @@ public class UseItem {
                 case ConstEvent.SU_KIEN_20_11:
                     if (Manager.EVENT_SEVER == idsukien) {
                         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-                            short[] temp = { 16, 15, 1039, 954, 955, 710, 711, 1040, 2023, 999, 1000, 1001 };
+                            short[] temp = {16, 15, 1039, 954, 955, 710, 711, 1040, 2023, 999, 1000, 1001};
                             byte index = (byte) Util.nextInt(0, temp.length - 1);
                             short[] icon = new short[2];
                             icon[0] = item.template.iconID;
@@ -1428,8 +1430,8 @@ public class UseItem {
                                 InventoryService.gI().sendItemBags(pl);
                                 Service.getInstance().sendThongBao(pl, "Bạn nhận được " + ruby + " Hồng Ngọc");
                             } else {
-                                int[] temp = { spl, dnc, nr, nrBang, 387, 390, 393, 821, 822, 746, 380, 999, 1000, 1001,
-                                        936, 2022 };
+                                int[] temp = {spl, dnc, nr, nrBang, 387, 390, 393, 821, 822, 746, 380, 999, 1000, 1001,
+                                        936, 2022};
                                 byte index = (byte) Util.nextInt(0, temp.length - 1);
                                 short[] icon = new short[2];
                                 icon[0] = item.template.iconID;
@@ -1898,9 +1900,9 @@ public class UseItem {
 
     private void openboxkichhoat(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            short[] temp = { 76, 188, 189, 190, 441, 442, 447, 2010, 2009, 865, 938, 939, 940, 16, 17, 18, 19, 20, 946,
-                    947, 948, 382, 383, 384, 385 };
-            int[][] gold = { { 5000, 20000 } };
+            short[] temp = {76, 188, 189, 190, 441, 442, 447, 2010, 2009, 865, 938, 939, 940, 16, 17, 18, 19, 20, 946,
+                    947, 948, 382, 383, 384, 385};
+            int[][] gold = {{5000, 20000}};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
             icon[0] = item.template.iconID;
@@ -2018,8 +2020,8 @@ public class UseItem {
 
     private void openCSKB(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            short[] temp = { 76, 188, 189, 190, 381, 382, 383, 384, 385 };
-            int[][] gold = { { 5000, 20000 } };
+            short[] temp = {76, 188, 189, 190, 381, 382, 383, 384, 385};
+            int[][] gold = {{5000, 20000}};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
             icon[0] = item.template.iconID;
@@ -2310,9 +2312,9 @@ public class UseItem {
                     break;
             }
         } // else if (tempId == SummonDragon.NGOC_RONG_SIEU_CAP) {
-          // SummonDragon.gI().openMenuSummonShenron(pl, (byte) 1015,
-          // SummonDragon.DRAGON_BLACK_SHENRON);
-          // }
+        // SummonDragon.gI().openMenuSummonShenron(pl, (byte) 1015,
+        // SummonDragon.DRAGON_BLACK_SHENRON);
+        // }
         else if (tempId >= SummonDragon.NGOC_RONG_BANG[0] && tempId <= SummonDragon.NGOC_RONG_BANG[6]) {
             switch (tempId) {
                 case 2045:
@@ -2564,7 +2566,7 @@ public class UseItem {
 
     void useRada1298(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idlist[] = { 20, 19, 18, 17 };
+            short idlist[] = {20, 19, 18, 17};
             int id = -1;
             int rd = Util.nextInt(0, 100);
             if (rd <= 60) {
@@ -2588,7 +2590,7 @@ public class UseItem {
 
     void useHopLinhThu1302(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 2003, 2006, 2007 };
+            short idList[] = {2003, 2006, 2007};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             vp.itemOptions.add(new ItemOption(101, Util.nextInt(50, 100)));
             vp.itemOptions.add(new ItemOption(93, 3));
@@ -2603,7 +2605,7 @@ public class UseItem {
 
     void useHomCaitrang1303(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 526, 527, 528, 549 };
+            short idList[] = {526, 527, 528, 549};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             vp.itemOptions.add(new ItemOption(8, 50));
             vp.itemOptions.add(new ItemOption(93, 3));
@@ -2648,7 +2650,7 @@ public class UseItem {
     public void OpenHopThanlinh1998(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 4) {
 
-            int[][] items = { { 555, 556, 562, 563, 561 }, { 557, 558, 564, 565, 561 }, { 559, 560, 566, 567, 561 } };
+            int[][] items = {{555, 556, 562, 563, 561}, {557, 558, 564, 565, 561}, {559, 560, 566, 567, 561}};
             Item aotl = ItemService.gI().createNewItem((short) items[player.gender][0]);
             Item wTl = ItemService.gI().createNewItem((short) items[player.gender][1]);
             Item gTl = ItemService.gI().createNewItem((short) items[player.gender][2]);
@@ -2724,7 +2726,7 @@ public class UseItem {
 
     void useTuiQuaThieuNhiXin1348(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 1345, 1346, 1347 };
+            short idList[] = {1345, 1346, 1347};
             Item ct = ItemService.gI().createNewItem((short) idList[Util.nextInt(idList.length)]);
             switch (ct.template.id) {
                 case 1345:
@@ -2759,7 +2761,7 @@ public class UseItem {
 
     void useTuiQuaThieuNhi1349(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 987, 16, 1150, 1151, 1152, 1153, 17, 1304, 1305, 282 };
+            short idList[] = {987, 16, 1150, 1151, 1152, 1153, 17, 1304, 1305, 282};
             Item ct = ItemService.gI().createNewItem((short) idList[Util.nextInt(idList.length)]);
             if (ct.template.id == 282) {
                 ct.itemOptions.add(new ItemOption(101, 100));
@@ -2792,7 +2794,7 @@ public class UseItem {
 
     void openRuongBac(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 1235, 2058, 16, 1351, 1197, 1254, 2017, 2005 };
+            short idList[] = {1235, 2058, 16, 1351, 1197, 1254, 2017, 2005};
             short id = -1;
             int rd = Util.nextInt(100);
             if (rd < 10) {
@@ -2883,7 +2885,7 @@ public class UseItem {
 
     void openRuongVang(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            short idList[] = { 1236, 860, 16, 1352, 2005, 852, 865, 1202 };
+            short idList[] = {1236, 860, 16, 1352, 2005, 852, 865, 1202};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             switch (vp.template.id) {
                 case 1236:
@@ -2906,7 +2908,7 @@ public class UseItem {
                     break;
                 case 852:
                 case 865:
-                    short idRd[] = { 50, 77, 103 };
+                    short idRd[] = {50, 77, 103};
                     vp.itemOptions.add(new ItemOption(idRd[Util.nextInt(idRd.length)], 15));
                     vp.itemOptions.add(new ItemOption(197, 3));
                     if (Util.isTrue(90, 100)) {
@@ -2953,7 +2955,7 @@ public class UseItem {
     void openCapsuleHuydiet1353(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
 
-            int[][] items = { { 650, 651, 657, 658 }, { 652, 653, 659, 660 }, { 654, 655, 661, 662 } };
+            int[][] items = {{650, 651, 657, 658}, {652, 653, 659, 660}, {654, 655, 661, 662}};
             Item randomdoHuydiet = ItemService.gI().createNewItem((short) items[player.gender][Util.nextInt(3)]);
 
             RewardService.gI().initBaseOptionClothes(randomdoHuydiet);
@@ -2970,7 +2972,7 @@ public class UseItem {
 
     void useTinhThach1357(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 1365, 1364 };
+            short idList[] = {1365, 1364};
             Item ct = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             switch (ct.template.id) {
                 case 1365:
@@ -2999,7 +3001,7 @@ public class UseItem {
 
     void useCapsule1374(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 458, 455, 883 };
+            short idList[] = {458, 455, 883};
             Item ct = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             switch (ct.template.id) {
                 case 458:
@@ -3036,7 +3038,7 @@ public class UseItem {
 
     void useHopItem1375(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 1304, 1150, 1151, 1152, 1153 };
+            short idList[] = {1304, 1150, 1151, 1152, 1153};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             CombineServiceNew.gI().sendEffectOpenItem(player, item.template.iconID, vp.template.iconID);
             InventoryService.gI().subQuantityItemsBag(player, item, 1);
@@ -3229,9 +3231,9 @@ public class UseItem {
         }
     }
 
-    String skhch[][] = { { "Sét\nKirin", "Sét\nSongoku", "Sét\nThiên xin hăng" },
-            { "Sét\nPicolo", "Sét\nLiên hoàn", "Sét\nĐẻ trứng" },
-            { "Sét\n Kakarot", "Sét\n Cadic", "Sét\nNapan" } };
+    String skhch[][] = {{"Sét\nKirin", "Sét\nSongoku", "Sét\nThiên xin hăng"},
+            {"Sét\nPicolo", "Sét\nLiên hoàn", "Sét\nĐẻ trứng"},
+            {"Sét\n Kakarot", "Sét\n Cadic", "Sét\nNapan"}};
 
     public void UseHopThanLinh1400(Player player, int type) {
         if (type == -1) {
@@ -3245,7 +3247,7 @@ public class UseItem {
         } else {
             Item hop = InventoryService.gI().findItemBag(player, 1400);
             if (hop != null) {
-                int opt[][] = { { 128, 129, 127 }, { 130, 131, 132 }, { 133, 134, 135 } };
+                int opt[][] = {{128, 129, 127}, {130, 131, 132}, {133, 134, 135}};
                 int skhId = opt[player.gender][type];
                 for (int i = 0; i < 5; i++) {
                     Item vp = ItemService.gI().createNewItem((short) ConstItem.LIST_ITEM_CLOTHES[player.gender][i][0]);
@@ -3279,7 +3281,7 @@ public class UseItem {
 
     void useHopBiAn1402(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 3) {
-            short idlist[] = { 1364, 884 };
+            short idlist[] = {1364, 884};
             for (short id : idlist) {
                 Item vp = ItemService.gI().createNewItem(id);
                 switch (vp.template.id) {
@@ -3318,11 +3320,11 @@ public class UseItem {
             int diem = 0;
             switch (item.template.id) {
                 case 1411:
-                    listvp = new int[] { 1410, 1150, 1151, 1152, 1153 };
+                    listvp = new int[]{1410, 1150, 1151, 1152, 1153};
                     diem = 1;
                     break;
                 case 1412:
-                    listvp = new int[] { 1407, 1408, 1409, 1413, 1414, 1150, 1151, 1152, 1153 };
+                    listvp = new int[]{1407, 1408, 1409, 1413, 1414, 1150, 1151, 1152, 1153};
                     diem = 2;
                     break;
             }
@@ -3380,7 +3382,7 @@ public class UseItem {
 
     void useHopQuaColler1417(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 878, 879, 1407 };
+            short idList[] = {878, 879, 1407};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             switch (vp.template.id) {
                 case 879:
@@ -3435,7 +3437,7 @@ public class UseItem {
 
     void use1439(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short idList[] = { 381, 382, 383, 1304, 1305, 1393, 1376 };
+            short idList[] = {381, 382, 383, 1304, 1305, 1393, 1376};
             Item vp = ItemService.gI().createNewItem(idList[Util.nextInt(idList.length)]);
             InventoryService.gI().addItemBag(player, vp, 999);
             InventoryService.gI().subQuantityItemsBag(player, item, 1);
@@ -3523,8 +3525,8 @@ public class UseItem {
     void useLongden1490(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
             player.pointTrungThu += 2;
-            short idList[] = { 1491, 18, 17, 1485, 18 };
-            short rate[] = { 20, 20, 20, 30, 10 };
+            short idList[] = {1491, 18, 17, 1485, 18};
+            short rate[] = {20, 20, 20, 30, 10};
             short idvp = Util.getRandomId(idList, rate);
             Item vp = ItemService.gI().createNewItem(idvp);
             switch (vp.getId()) {
@@ -3554,8 +3556,8 @@ public class UseItem {
     void usehopquaTang1487(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
             player.pointTrungThu += 6;
-            short[] idList = { 1491, 18, 1485, 18, 17 };
-            short[] rate = { 20, 20, 40, 10, 10 };
+            short[] idList = {1491, 18, 1485, 18, 17};
+            short[] rate = {20, 20, 40, 10, 10};
             short idvp = Util.getRandomId(idList, rate);
             Item vp = ItemService.gI().createNewItem(idvp);
             switch (vp.getId()) {
@@ -3640,8 +3642,8 @@ public class UseItem {
 
     void useHopSKH1494(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short[] idList = { 0, 1, 3 };
-            short[] rate = { 60, 10, 30 };
+            short[] idList = {0, 1, 3};
+            short[] rate = {60, 10, 30};
             short type = Util.getRandomId(idList, rate);
             Item vp = ItemService.gI().createNewItem((short) ConstItem.LIST_ITEM_CLOTHES[player.gender][type][0]);
             RewardService.gI().initBaseOptionClothes(item);
@@ -3658,8 +3660,8 @@ public class UseItem {
 
     void useBanhKem1505(Player player, Item item) {
         if (InventoryService.gI().getCountEmptyBag(player) > 0) {
-            short[] idList = { 1150, 1151, 1152, 2003, 2006 };
-            short[] rate = { 10, 10, 10, 50, 20 };
+            short[] idList = {1150, 1151, 1152, 2003, 2006};
+            short[] rate = {10, 10, 10, 50, 20};
             short idVp = Util.getRandomId(idList, rate);
             Item vp = ItemService.gI().createNewItem(idVp);
             switch (vp.getId()) {
@@ -3718,6 +3720,26 @@ public class UseItem {
             InventoryService.gI().sendItemBags(player);
         } else {
             Service.getInstance().sendThongBao(player, "Không đủ sức mạnh để thực hiện !");
+        }
+    }
+
+
+
+    public void handleBanVang(Player player, int index){
+        if(player != null){
+            int[] sl = {1,10,20};
+            if(InventoryService.gI().getQuantity(player,457) >= sl[index]){
+                if(player.inventory.gold + (500_000_000L * sl[index]) < Inventory.LIMIT_GOLD ){
+                    player.inventory.gold += (500_000_000L * sl[index]);
+                    Service.getInstance().sendThongBao(player,"Bán thành công x" + sl[index] + " thành " + Util.numberToMoney(500_000_000L * sl[index]));
+                    PlayerService.gI().sendInfoHpMpMoney(player);
+                } else {
+                    Service.getInstance().sendThongBao(player,"Lượng vàng sau khi bán vượt quá giới hạn " + (Util.numberToMoney(Inventory.LIMIT_GOLD)) + " vàng");
+                }
+            } else {
+                Service.getInstance().sendThongBao(player,"Hãy đảm bảo bạn có đủ số lượng vàng để bán !");
+            }
+
         }
     }
 

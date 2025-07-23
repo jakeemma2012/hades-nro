@@ -53,9 +53,6 @@ import nro.models.phuban.MabuBoss.MabuRom;
 import nro.models.player.Player;
 import nro.services.MapService;
 
-/**
- *
- */
 public class BossFactory {
 
     public static final byte BASIL = -45;
@@ -287,21 +284,10 @@ public class BossFactory {
                 createBoss(KINGKONG);
                 createBoss(XEN_BO_HUNG_1);
                 createBoss(ANDROID_15);
-                createBoss(MABU_PHUBAN);
 
-                createBoss(TRUNG_UY_TRANG);
-                createBoss(TRUNG_UY_XANH_LO);
-                createBoss(TRUNG_UY_THEP);
+//                createBoss(KHI_6);
+//                createBoss(HOAHONG);
 
-                createBoss(LANCON);
-                createBoss(LANCON1);
-                createBoss(LANCON2);
-
-                createBoss(QUY_LAO);
-                createBoss(KHI_6);
-                createBoss(HOAHONG);
-
-                createBoss(FIDEGOLD);
                 // for (int i = 0; i < 10; i++) {
                 // createBoss(SUPER_BROLY);
                 // }

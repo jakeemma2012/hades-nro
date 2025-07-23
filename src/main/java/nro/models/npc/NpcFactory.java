@@ -23,14 +23,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import nro.models.npc.NpcForge.*;
 
 import static nro.server.Manager.*;
 import static nro.services.func.SummonDragon.*;
 
-/**
- *
- */
 public class NpcFactory {
 
     // playerid - object
@@ -311,14 +309,14 @@ public class NpcFactory {
                             SummonDragon.gI().reOpenShenronWishes(player);
                         }
                         break;
-                    // case ConstNpc.SHENRON_1_1:
-                    // if (player.iDMark.getIndexMenu() == ConstNpc.SHENRON_1_1
-                    // && select == SHENRON_1_STAR_WISHES_1.length - 1) {
-                    // NpcService.gI().createMenuRongThieng(player, ConstNpc.SHENRON_1_2,
-                    // SHENRON_SAY,
-                    // SHENRON_1_STAR_WISHES_2);
-                    // break;
-                    // }
+                    case ConstNpc.SHENRON_1_1:
+                        if (player.iDMark.getIndexMenu() == ConstNpc.SHENRON_1_1
+                                && select == SHENRON_1_STAR_WISHES_1.length - 1) {
+                            NpcService.gI().createMenuRongThieng(player, ConstNpc.SHENRON_1_2,
+                                    SHENRON_SAY,
+                                    SHENRON_1_STAR_WISHES_2);
+                            break;
+                        }
                     case ConstNpc.SHENRON_1_2:
                         if (player.iDMark.getIndexMenu() == ConstNpc.SHENRON_1_2
                                 && select == SHENRON_1_STAR_WISHES_2.length - 1) {
@@ -353,6 +351,9 @@ public class NpcFactory {
             @Override
             public void confirmMenu(Player player, int select) {
                 switch (player.iDMark.getIndexMenu()) {
+                    case ConstNpc.NPC_BAN_VANG:
+                        UseItem.gI().handleBanVang(player, select);
+                        break;
                     case ConstNpc.CONFIRM_DIALOG:
                         ConfirmDialog confirmDialog = player.getConfirmDialog();
                         if (confirmDialog != null) {
@@ -435,7 +436,7 @@ public class NpcFactory {
                                     Logger.getLogger(NpcFactory.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
-                                break;
+                            break;
                             case 1:// set kaioken
                                 try {
                                     ItemService.gI().setKaioKen(player);
@@ -767,7 +768,7 @@ public class NpcFactory {
                                     break;
                                 case 3:
                                     if (p != null) {
-                                        String[] selects = new String[] { "Đồng ý", "Hủy" };
+                                        String[] selects = new String[]{"Đồng ý", "Hủy"};
                                         NpcService.gI().createMenuConMeo(player, ConstNpc.BAN_PLAYER, -1,
                                                 "Bạn có chắc chắn muốn ban " + p.name, selects, p);
                                     }

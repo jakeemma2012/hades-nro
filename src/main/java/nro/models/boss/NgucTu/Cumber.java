@@ -1,13 +1,18 @@
 package nro.models.boss.NgucTu;
 
+import nro.consts.ConstRatio;
 import nro.models.boss.Boss;
 import nro.models.boss.BossData;
 import nro.models.boss.BossFactory;
 import nro.models.boss.FutureBoss;
 import nro.models.map.ItemMap;
 import nro.models.player.Player;
+import nro.services.RewardService;
 import nro.services.Service;
+import nro.services.SkillService;
 import nro.services.TaskService;
+import nro.utils.Log;
+import nro.utils.SkillUtil;
 import nro.utils.Util;
 
 public class Cumber extends FutureBoss {
@@ -24,16 +29,11 @@ public class Cumber extends FutureBoss {
     @Override
     public void rewards(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
-        for (int i = 0; i < Util.nextInt(20); i++) {
-            ItemMap itemMap = null;
-            int x = this.location.x + (14 * i);
-            if (x < 0 || x >= this.zone.map.mapWidth) {
-                break;
-            }
-            int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
-            itemMap = new ItemMap(zone, Util.nextInt(2014, 2018), 1, x, y, plKill.id);
-            Service.getInstance().dropItemMap(zone, itemMap);
-        }
+        int x = this.location.x;
+        int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
+        ItemMap itemMap = new ItemMap(zone, Util.nextInt(2014, 2018), 1, x, y, plKill.id);
+        RewardService.gI().initBaseOptionTinhThach(itemMap);
+        Service.getInstance().dropItemMap(zone, itemMap);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Cumber extends FutureBoss {
 
     @Override
     public void initTalk() {
-        textTalkMidle = new String[] { "Ta chính là đệ nhất vũ trụ cao thủ" };
+        textTalkMidle = new String[]{"Ta chính là đệ nhất vũ trụ cao thủ"};
     }
 
     @Override

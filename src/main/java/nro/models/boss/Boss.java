@@ -869,4 +869,20 @@ public abstract class Boss extends Player implements BossInterface {
         }
     }
 
+    public void getRewardBlack(Boss boss, Player player, int tile, int titleRate) {
+        if(boss != null && player != null) {
+                if(Util.isTrue(tile, titleRate)) {
+                    ItemMap itm = null;
+                    int x = boss.location.x;
+                    int y = boss.zone.map.yPhysicInTop(x, this.location.y - 24);
+                    if(Util.isTrue(50,100)){
+                        itm = new ItemMap(boss.zone,ConstItem.doSKHVip[Util.nextInt(0,4)][Util.nextInt(0,2)][12],1,x,y,player.id);
+                        RewardService.gI().initBaseOptionClothesMap(itm);
+                    } else {
+                        itm = new ItemMap(boss.zone,Util.getOne(15,16),1,x,y,player.id);
+                    }
+                    Service.getInstance().dropItemMap(zone, itm);
+                }
+        }
+    }
 }

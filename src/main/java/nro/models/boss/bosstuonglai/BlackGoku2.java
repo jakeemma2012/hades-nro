@@ -51,6 +51,7 @@ public class BlackGoku2 extends Boss {
     @Override
     public void rewards(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+        getRewardBlack(this,plKill,100,100);
     }
 
     @Override
@@ -157,7 +158,22 @@ public class BlackGoku2 extends Boss {
     @Override
     public void joinMap() {
         if (this.zone == null) {
-            this.zone = getMapCanJoin(mapJoin[2]);
+            this.zone = getMapCanJoin(mapJoin[Util.nextInt(0, mapJoin.length - 1)]);
+        }
+
+        if (this.zone != null) {
+            for (int j = 0; j < zone.map.zones.size(); j++) {
+                Zone z = zone.map.zones.get(j);
+                if (z != null) {
+                    for (Player p : z.getBosses()) {
+                        if (p.id == BossFactory.BLACKGOKU || p.id == BossFactory.BLACKGOKU_1 || p.id == BossFactory.BLACKGOKU_2
+                                || p.id == BossFactory.ZAMASU || p.id == BossFactory.SUPERBLACKGOKU || p.id == BossFactory.ZAMASU2) {
+                            this.zone = null;
+                            this.joinMap();
+                        }
+                    }
+                }
+            }
         }
         if (this.zone != null) {
             ChangeMapService.gI().changeMapBySpaceShip(this, this.zone, ChangeMapService.TELEPORT_YARDRAT);
@@ -177,7 +193,7 @@ public class BlackGoku2 extends Boss {
         Boss Superblackgoku = BossFactory.createBoss(BossFactory.SUPERBLACKGOKU);
 
         Superblackgoku.zone = this.zone;
-
+        Superblackgoku.parent = this;
         Boss ZAMASU = BossFactory.createBoss(BossFactory.ZAMASU);
         ZAMASU.zone = this.zone;
 

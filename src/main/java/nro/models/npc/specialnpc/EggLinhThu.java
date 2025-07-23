@@ -11,10 +11,6 @@ import nro.services.Service;
 import nro.services.func.ChangeMapService;
 import nro.utils.Util;
 
-/**
- *
- * 
- */
 public class EggLinhThu {
 
     private static final long DEFAULT_TIME_DONE = 2592000000L;
@@ -23,7 +19,7 @@ public class EggLinhThu {
     public long lastTimeCreate;
     public long timeDone;
     public int type;
-    private final short id = 50; // id npc
+    private final short id = 50;
 
     public EggLinhThu(Player player, long lastTimeCreate, long timeDone, int type) {
         this.player = player;
@@ -107,9 +103,9 @@ public class EggLinhThu {
     public void laychiso(Player player, Item linhthu, int lvnow) {
 
         if (Util.isTrue(25, 100)) {
-            linhthu.itemOptions.add(new ItemOption(50, Util.nextInt(5, 10)));
-            linhthu.itemOptions.add(new ItemOption(77, Util.nextInt(5, 10)));
-            linhthu.itemOptions.add(new ItemOption(103, Util.nextInt(5, 10)));
+            linhthu.itemOptions.add(new ItemOption(50, Util.nextInt(1, 10)));
+            linhthu.itemOptions.add(new ItemOption(77, Util.nextInt(1, 10)));
+            linhthu.itemOptions.add(new ItemOption(103, Util.nextInt(1, 10)));
         } else {
             linhthu.itemOptions.add(new ItemOption(50, Util.nextInt(1, 5)));
             linhthu.itemOptions.add(new ItemOption(77, Util.nextInt(1, 5)));

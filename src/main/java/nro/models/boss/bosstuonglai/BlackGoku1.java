@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import nro.services.TaskService;
 
 public class BlackGoku1 extends Boss {
@@ -45,12 +46,13 @@ public class BlackGoku1 extends Boss {
 
     @Override
     public void initTalk() {
-        this.textTalkAfter = new String[] { "Các ngươi chờ đấy, ta sẽ quay lại sau" };
+        this.textTalkAfter = new String[]{"Các ngươi chờ đấy, ta sẽ quay lại sau"};
     }
 
     @Override
     public void rewards(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+        getRewardBlack(this, plKill, 100, 100);
     }
 
     @Override
@@ -157,14 +159,28 @@ public class BlackGoku1 extends Boss {
     @Override
     public void joinMap() {
         if (this.zone == null) {
-            this.zone = getMapCanJoin(mapJoin[1]);
+            this.zone = getMapCanJoin(mapJoin[Util.nextInt(0, mapJoin.length - 1)]);
         }
         if (this.zone != null) {
-            ChangeMapService.gI().changeMapBySpaceShip(this, this.zone, ChangeMapService.TELEPORT_YARDRAT);
-            ServerNotify.gI().notify("Boss " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
-            System.out.println(
-                    "Boss: " + this.name + " xuất hiện mapId: " + this.zone.map.mapId + " zone: " + this.zone.zoneId);
+            for (int j = 0; j < zone.map.zones.size(); j++) {
+                Zone z = zone.map.zones.get(j);
+                if (z != null) {
+                    for (Player p : z.getBosses()) {
+                        if (p.id == BossFactory.BLACKGOKU || p.id == BossFactory.BLACKGOKU_1 || p.id == BossFactory.BLACKGOKU_2
+                                || p.id == BossFactory.ZAMASU || p.id == BossFactory.SUPERBLACKGOKU || p.id == BossFactory.ZAMASU2) {
+                            this.zone = null;
+                            this.joinMap();
+                        }
+                    }
+                }
+            }
         }
+       if(zone != null) {
+           ChangeMapService.gI().changeMapBySpaceShip(this, this.zone, ChangeMapService.TELEPORT_YARDRAT);
+           ServerNotify.gI().notify("Boss " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
+           System.out.println(
+                   "Boss: " + this.name + " xuất hiện mapId: " + this.zone.map.mapId + " zone: " + this.zone.zoneId);
+       }
     }
 
     @Override
@@ -177,6 +193,7 @@ public class BlackGoku1 extends Boss {
         Boss Superblackgoku = BossFactory.createBoss(BossFactory.SUPERBLACKGOKU);
 
         Superblackgoku.zone = this.zone;
+        Superblackgoku.parent = this;
 
         Boss ZAMASU = BossFactory.createBoss(BossFactory.ZAMASU);
         ZAMASU.zone = this.zone;

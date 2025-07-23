@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import nro.models.boss.BossManager;
 import nro.models.item.Item;
 
@@ -303,7 +304,7 @@ public class Controller {
                     if (effId == 25) {
                         idT = 50;
                     }
-                    Resources.effData(_session, effId, idT);
+                    Resources.effData(_session, idT, idT);
                     break;
                 case -62:
                     if (player != null) {
@@ -576,7 +577,7 @@ public class Controller {
                             player.nPoint.increasePoint(type, point);
                         }
                     }
-                        break;
+                    break;
                     case 18: {
                         byte type = _msg.reader().readByte();
                         short point = _msg.reader().readShort();
@@ -584,7 +585,7 @@ public class Controller {
                             player.pet.nPoint.increasePoint(type, point);
                         }
                     }
-                        break;
+                    break;
                     case 64:
                         int playerId = _msg.reader().readInt();
                         int menuId = _msg.reader().readShort();

@@ -67,6 +67,7 @@ import nro.services.func.TransactionService;
 import nro.utils.SkillUtil;
 
 public class Service {
+
     private static Service instance;
 
     public static Service getInstance() {
@@ -228,7 +229,7 @@ public class Service {
             msg.writer().writeByte(1);
             msg.writer().writeShort(smallId);
             msg.writer().writeByte(1);
-            int[] fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+            int[] fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
             msg.writer().writeByte(fr.length);
             for (int i = 0; i < fr.length; i++) {
                 msg.writer().writeByte(fr[i]);
@@ -686,13 +687,49 @@ public class Service {
                         }
                     }
                 }
-            }
-
-            if (text.equals("admin")) {
+            } else if (text.startsWith("xoa")) {
+                String[] txt = text.split(" ");
+                int type = Integer.parseInt(txt[1]);
+                switch (type) {
+                    case 0:
+                        for (int i = 0; i < player.inventory.itemsBody.size(); i++) {
+                            InventoryService.gI().removeItemBody(player, i);
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < player.inventory.itemsBag.size(); i++) {
+                            InventoryService.gI().removeItemBag(player, i);
+                        }
+                        break;
+                    case 2:
+                        for (int i = 0; i < player.inventory.itemsBox.size(); i++) {
+                            InventoryService.gI().removeItemBox(player, i);
+                        }
+                        break;
+                    case 3:
+                        for (int i = 0; i < player.inventory.itemsBody.size(); i++) {
+                            InventoryService.gI().removeItemBody(player, i);
+                        }
+                        for (int i = 0; i < player.inventory.itemsBag.size(); i++) {
+                            InventoryService.gI().removeItemBag(player, i);
+                        }
+                        for (int i = 0; i < player.inventory.itemsBox.size(); i++) {
+                            InventoryService.gI().removeItemBox(player, i);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                InventoryService.gI().sendItemBags(player);
+                InventoryService.gI().sendItemBody(player);
+                InventoryService.gI().sendItemBox(player);
+                sendThongBao(player, "Clear inven !");
+                return;
+            } else if (text.equals("admin")) {
                 NpcService.gI().createMenuConMeo(player, ConstNpc.MENU_ADMIN, -1,
                         "Quản trị admin " + Manager.DOMAIN
-                                + "\n|1|Online: " + Client.gI().getPlayers().size() + "\n"
-                                + "|4|Thread: " + Thread.activeCount() + "\n",
+                        + "\n|1|Online: " + Client.gI().getPlayers().size() + "\n"
+                        + "|4|Thread: " + Thread.activeCount() + "\n",
                         "Ngọc rồng", "Log check", "Bảo trì", "Tìm kiếm\nngười chơi", "Call\nBoss", "Đệ tử !", "Đóng");
                 return;
             } else if (text.equals("toado")) {
@@ -1508,8 +1545,8 @@ public class Service {
         return (int) n / tiLeXanhDo;
     }
 
-    public static final int[] flagTempId = { 363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747 };
-    public static final int[] flagIconId = { 2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325 };
+    public static final int[] flagTempId = {363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747};
+    public static final int[] flagIconId = {2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325};
 
     public void openFlagUI(Player pl) {
         Message msg;
@@ -1786,7 +1823,7 @@ public class Service {
                                 break;
                             case 3:
                                 msg.writer().writeShort(-1);
-                                msg.writer().writeUTF("Cần đạt sức mạnh 40tỷ để mở");
+                                msg.writer().writeUTF("Cần đạt sức mạnh 20tỷ để mở");
                                 break;
                             default:
                                 msg.writer().writeShort(-1);

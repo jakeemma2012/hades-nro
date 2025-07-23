@@ -337,6 +337,7 @@ nro\models\map\ItemMap.class
 nro\models\npc\specialnpc\BillEgg.class
 nro\models\boss\Yardart\DoiTruong.class
 nro\consts\ConstPlayer.class
+nro\models\npc\NpcForge\MonaiTo.class
 nro\models\JsonResponse.class
 nro\manager\SieuHangManager$1.class
 nro\models\boss\dhvt\TauPayPay.class

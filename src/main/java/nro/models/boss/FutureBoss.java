@@ -22,20 +22,6 @@ public abstract class FutureBoss extends Boss {
             return 0;
         }
         // damage = (damage / 100) * 80;
-        if (this.id == BossFactory.OMEGA_PLUS) {
-            if (plAtt.isPl()) {
-                if (damage > 0) {
-                    if (this.nPoint.hp - damage > 0) {
-                        plAtt.dameOmega += damage;
-                    } else {
-                        plAtt.dameOmega += this.nPoint.hp;
-                    }
-                }
-                Service.getInstance().sendTextTime(plAtt, (byte) 11,
-                        String.format("#%s %s [%s", 999, "TOTAL DAME :", Util.fm.format(plAtt.dameOmega) + "]"),
-                        (short) 20);
-            }
-        }
         long da = super.injured(plAtt, damage, piercing, isMobAttack);
         // if (this.id == BossFactory.CUMBER || this.id == BossFactory.CUMBER2) {
         // long d = da;

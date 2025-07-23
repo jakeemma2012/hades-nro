@@ -338,4 +338,6 @@ public class ConstNpc {
 
         public static final int HANG_NGA_SHOP = 534;
 
+        public static final int NPC_BAN_VANG = 535;
+
 }

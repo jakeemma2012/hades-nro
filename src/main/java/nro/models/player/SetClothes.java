@@ -52,12 +52,13 @@ public class SetClothes {
     public int set8Star;
     public int set7Star;
 
+
     public void setup() {
         setDefault();
         setupSKT();
         setUpSetHhuyDiet();
 
-        setUpLevelSetClothe();
+//        setUpLevelSetClothe();
         setupSetSao();
 
         Item ct = this.player.inventory.itemsBody.get(5);
@@ -183,7 +184,6 @@ public class SetClothes {
                 break;
             }
         }
-
     }
 
     void setUpSetHhuyDiet() {
@@ -192,13 +192,13 @@ public class SetClothes {
             if (it != null && it.isNotNullItem()) {
                 if (it.getId() == ConstItem.doSKHVip[i][this.player.gender][13]) {
                     this.SetHuyDiet++;
-                }
-                if (it.getId() == ConstItem.doSKHVip[i][this.player.gender][12]) {
+                } else if (it.getId() == ConstItem.doSKHVip[i][this.player.gender][12]) {
                     godClothes++;
                 }
             }
         }
     }
+
 
     void setUpLevelSetClothe() {
         if (player.isPlnPet()) {
@@ -211,7 +211,7 @@ public class SetClothes {
                             setLevel8++;
                         } else if (param >= 7) {
                             setLevel7++;
-                        } 
+                        }
                     }
                 }
             }

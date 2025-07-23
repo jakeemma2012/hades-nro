@@ -181,7 +181,7 @@ public class GodGK {
                     // data kim lượng
                     dataArray = (JSONArray) JSONValue.parse(rs.getString("data_inventory"));
                     player.inventory.gold = Long.parseLong(dataArray.get(0).toString());
-                    player.inventory.gem = Integer.parseInt(dataArray.get(1).toString());
+                    player.inventory.gem = Integer.parseInt(dataArray.get(1 ).toString());
                     player.inventory.ruby = Integer.parseInt(dataArray.get(2).toString());
                     if (dataArray.size() >= 4) {
                         player.inventory.goldLimit = Long.parseLong(dataArray.get(3).toString());

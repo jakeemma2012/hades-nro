@@ -7,9 +7,7 @@ import nro.models.boss.BossFactory;
 import nro.models.map.Zone;
 import nro.models.player.Player;
 import nro.server.ServerNotify;
-import nro.services.EffectSkillService;
-import nro.services.Service;
-import nro.services.SkillService;
+import nro.services.*;
 import nro.services.func.ChangeMapService;
 import nro.utils.Log;
 import nro.utils.SkillUtil;
@@ -19,7 +17,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import nro.services.TaskService;
 
 public class Blackgoku extends Boss {
 
@@ -46,6 +43,7 @@ public class Blackgoku extends Boss {
     @Override
     public void rewards(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+        getRewardBlack(this,plKill,100,100);
     }
 
     @Override
@@ -152,7 +150,22 @@ public class Blackgoku extends Boss {
     @Override
     public void joinMap() {
         if (this.zone == null) {
-            this.zone = getMapCanJoin(mapJoin[0]);
+            this.zone = getMapCanJoin(mapJoin[Util.nextInt(0, mapJoin.length - 1)]);
+        }
+
+        if (this.zone != null) {
+            for (int j = 0; j < zone.map.zones.size(); j++) {
+                Zone z = zone.map.zones.get(j);
+                if (z != null) {
+                    for (Player p : z.getBosses()) {
+                        if (p.id == BossFactory.BLACKGOKU || p.id == BossFactory.BLACKGOKU_1 || p.id == BossFactory.BLACKGOKU_2
+                         || p.id == BossFactory.ZAMASU || p.id == BossFactory.SUPERBLACKGOKU || p.id == BossFactory.ZAMASU2) {
+                            this.zone = null;
+                            this.joinMap();
+                        }
+                    }
+                }
+            }
         }
         if (this.zone != null) {
             ChangeMapService.gI().changeMapBySpaceShip(this, this.zone, ChangeMapService.TELEPORT_YARDRAT);
@@ -172,6 +185,7 @@ public class Blackgoku extends Boss {
         Boss Superblackgoku = BossFactory.createBoss(BossFactory.SUPERBLACKGOKU);
 
         Superblackgoku.zone = this.zone;
+        Superblackgoku.parent = this;
 
         Boss ZAMASU = BossFactory.createBoss(BossFactory.ZAMASU);
         ZAMASU.zone = this.zone;

@@ -391,7 +391,7 @@ public class EffectSkin {
         try {
             int param = this.player.nPoint.tlHutHpMpXQ;
             if (param > 0) {
-                if (!this.player.isDie() && Util.canDoWithTime(lastTimeXenHutHpKi, 5000)) {
+                if (!this.player.isDie() && Util.canDoWithTime(lastTimeXenHutHpKi, 30_000)) {
                     int hpHut = 0;
                     int mpHut = 0;
                     List<Player> players = new ArrayList<>();

@@ -7,6 +7,7 @@ import nro.consts.ConstPlayer;
 import nro.consts.ConstTask;
 import nro.data.DataGame;
 import nro.dialog.ConfirmDialog;
+import nro.models.boss.Boss;
 import nro.models.clan.Buff;
 import nro.models.item.CaiTrang;
 import nro.models.boss.event.EscortedBoss;
@@ -51,9 +52,6 @@ import nro.models.npc.specialnpc.EggLinhThu;
 import nro.models.skill.SkillSpecial;
 import nro.utils.TimeUtil;
 
-/**
- *
- */
 public class Player {
 
     public BillEgg billEgg;
@@ -101,6 +99,7 @@ public class Player {
     public int mapIdBeforeLogout;
     public List<Zone> mapBlackBall;
     public Zone zone;
+    public Boss parent;
     public Zone mapBeforeCapsule;
     public List<Zone> mapCapsule;
     public Pet pet;
@@ -871,10 +870,6 @@ public class Player {
 
     //--------------------------------------------------------------------------
     public long injured(Player plAtt, long damage, boolean piercing, boolean isMobAttack) {
-//        Integer tungngu = GetDameByNoelBall(plAtt, damage);
-//        if (tungngu != null) {
-//            return tungngu;
-//        }
 //        if (this.getSession() != null && this.isAdmin()) {
 //            return 0;
 //        }
@@ -922,6 +917,9 @@ public class Player {
 //            if(this.isPl() && this.getSession().isAdmin){
 //                damage =1 ;
 //            }
+            if(plAtt != null && plAtt.isBoss){
+                    damage = this.nPoint.hpMax * 10/100;
+            }
             this.nPoint.subHP(damage);
             if (this.effectSkill.isHoldMabu && Util.isTrue(30, 150)) {
                 Service.getInstance().removeMabuEat(this);

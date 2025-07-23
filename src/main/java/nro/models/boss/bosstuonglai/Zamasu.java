@@ -33,6 +33,7 @@ public class Zamasu extends Boss {
     @Override
     public void rewards(Player player) {
         TaskService.gI().checkDoneTaskKillBoss(player, this);
+        getRewardBlack(this,player,100,100);
     }
 
     @Override

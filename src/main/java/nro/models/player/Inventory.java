@@ -11,7 +11,7 @@ import nro.models.item.Item;
  */
 public class Inventory {
 
-    public static final long LIMIT_GOLD = 1_000_000_000_000L;
+    public static final long LIMIT_GOLD = 20_000_000_000L;
 
     public static final int LIMIT_RUBY = 2000000000;
 

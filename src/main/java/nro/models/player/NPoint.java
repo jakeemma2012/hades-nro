@@ -1849,7 +1849,7 @@ public class NPoint {
 
     public void setBasePoint() {
         setPointFlagBag();
-        setPointSetClothe();
+//        setPointSetClothe();
         setItemTime();
         setDanhHieuTop();
         setTimeNRSD();

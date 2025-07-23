@@ -1316,7 +1316,6 @@ public class CombineServiceNew {
                     RewardService.gI().initBaseOptionClothes(dts);
 
                     int csThuong = 0;
-
                     if (DMM != null) {
                         if (Util.isTrue(((DMM.getId() - 1078) * 10), 100)) {
                             csThuong = Util.getOne(2, 3);
@@ -1333,15 +1332,16 @@ public class CombineServiceNew {
                             dts.itemOptions.add(new ItemOption(opt[Util.nextInt(opt.length)], Util.getOne(1, 4)));
                         }
                     }
+                    InventoryService.gI().subQuantityItemsBag(player, manh, 999);
 
                     InventoryService.gI().addItemBag(player, dts, 1);
                     InventoryService.gI().sendItemBags(player);
                     Service.getInstance().sendEffectCombine(player, COMBINE_SUCCESS);
                 } else {
+                    InventoryService.gI().subQuantityItemsBag(player, manh, 99);
                     Service.getInstance().sendEffectCombine(player, COMBINE_FAIL);
                 }
 
-                InventoryService.gI().subQuantityItemsBag(player, manh, 999);
                 InventoryService.gI().subQuantityItemsBag(player, congThuc, 1);
                 if (Dnc != null) {
                     InventoryService.gI().subQuantityItemsBag(player, Dnc, 1);
@@ -1497,7 +1497,6 @@ public class CombineServiceNew {
                                     EggLinhThu.createEggLinhThu(player, 1);
                                     break;
                             }
-
                             InventoryService.gI().subQuantityItemsBag(player, hon, 200);
                             InventoryService.gI().subQuantityItemsBag(player, tv, 20);
                             InventoryService.gI().subQuantityItemsBag(player, trung, 1);
@@ -1531,11 +1530,10 @@ public class CombineServiceNew {
                     if (player.egglinhthu != null && player.egglinhthu.getSecondDone() <= 0) {
                         short[] idlthu;
                         if (player.egglinhthu.type == 0) {
-                            idlthu = new short[] { 2021, 2024, 2019, 2020 };
+                            idlthu = new short[] { 2025, 2023, 2022, 2026};
                         } else {
-                            idlthu = new short[] { 2025, 2023, 2022, 2026 };
+                            idlthu = new short[] { 2021, 2024, 2019, 2020 };
                         }
-
                         Item linhthu = ItemService.gI().createNewItem(idlthu[Util.nextInt(idlthu.length)]);
 
                         player.egglinhthu.laychiso(player, linhthu, 0);

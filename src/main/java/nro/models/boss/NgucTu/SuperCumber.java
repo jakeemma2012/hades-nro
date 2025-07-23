@@ -3,6 +3,7 @@ package nro.models.boss.NgucTu;
 import nro.models.boss.*;
 import nro.models.map.ItemMap;
 import nro.models.player.Player;
+import nro.services.RewardService;
 import nro.services.Service;
 import nro.services.TaskService;
 import nro.utils.Util;
@@ -24,16 +25,11 @@ public class SuperCumber extends FutureBoss {
     @Override
     public void rewards(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
-        for (int i = 0; i < Util.nextInt(20); i++) {
-            ItemMap itemMap = null;
-            int x = this.location.x + (14 * i);
-            if (x < 0 || x >= this.zone.map.mapWidth) {
-                break;
-            }
-            int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
-            itemMap = new ItemMap(zone, Util.nextInt(2014, 2018), 1, x, y, plKill.id);
-            Service.getInstance().dropItemMap(zone, itemMap);
-        }
+        int x = this.location.x;
+        int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
+        ItemMap itemMap = new ItemMap(zone, Util.nextInt(2014, 2018), 1, x, y, plKill.id);
+        RewardService.gI().initBaseOptionTinhThach(itemMap);
+        Service.getInstance().dropItemMap(zone, itemMap);
     }
 
     @Override
@@ -48,9 +44,6 @@ public class SuperCumber extends FutureBoss {
                 }
             }
             long dame = super.injured(plAtt, damage, piercing, isMobAttack);
-            if (this.isDie()) {
-                rewards(plAtt);
-            }
             return dame;
         }
     }

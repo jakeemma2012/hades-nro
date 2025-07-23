@@ -167,6 +167,7 @@ public class Superblackgoku extends Boss {
         if (zsm != null && !zsm.isDie()) {
             Boss superZamasu = BossFactory.createBoss(BossFactory.ZAMASU2);
             superZamasu.zone = this.zone;
+            superZamasu.parent = this.parent;
 
             int x = this.location.x;
             int y = this.zone.map.yPhysicInTop(x, 0);
@@ -177,18 +178,7 @@ public class Superblackgoku extends Boss {
                     y - 24);
             Service.getInstance().sendFusionEffect(this, 4);
         } else {
-            Boss blackgoku = null;
-            switch (this.zone.map.mapId) {
-                case 92:
-                    blackgoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU);
-                    break;
-                case 93:
-                    blackgoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU_1);
-                    break;
-                case 94:
-                    blackgoku = BossManager.gI().getBossById(BossFactory.BLACKGOKU_2);
-                    break;
-            }
+            Boss blackgoku = BossManager.gI().getBossById((int)this.parent.id);
 
             if (blackgoku != null) {
                 blackgoku.setJustRest();

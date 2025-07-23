@@ -722,14 +722,8 @@ public class Pet extends Player {
                     }
                     break;
                 case 3:
-                    if (this.nPoint.power >= 40_000_000_000L) {
+                    if (this.nPoint.power >= 20_000_000_000L) {
                         openSkill4();
-                    }
-                    break;
-                case 4:
-                    if (this.nPoint.power >= 100_000_000_000L) {
-                        openSkill5();
-                        this.nPoint.calPoint();
                     }
                     break;
             }

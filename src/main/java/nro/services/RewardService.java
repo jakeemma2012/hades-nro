@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
 import nro.models.mob.ArrietyDrop;
 
 /**
@@ -31,10 +32,10 @@ public class RewardService {
 
     // id option set kich hoat (tên set, hiệu ứng set, tỉ lệ, type tỉ lệ)
     private static final int[][][] ACTIVATION_SET = {
-            { { 129, 141, 1, 1000 }, { 127, 139, 1, 1000 }, { 128, 140, 1, 1000 } }, // songoku - thien xin hang - kirin
-            { { 131, 143, 1, 1000 }, { 132, 144, 1, 1000 }, { 130, 142, 1, 1000 } }, // oc tieu - pikkoro daimao -
-                                                                                     // picolo
-            { { 135, 138, 1, 1000 }, { 133, 136, 1, 1000 }, { 134, 137, 1, 1000 } } // kakarot - cadic - nappa
+            {{129, 141, 1, 1000}, {127, 139, 1, 1000}, {128, 140, 1, 1000}}, // songoku - thien xin hang - kirin
+            {{131, 143, 1, 1000}, {132, 144, 1, 1000}, {130, 142, 1, 1000}}, // oc tieu - pikkoro daimao -
+            // picolo
+            {{135, 138, 1, 1000}, {133, 136, 1, 1000}, {134, 137, 1, 1000}} // kakarot - cadic - nappa
     };
     private static RewardService i;
 
@@ -104,7 +105,7 @@ public class RewardService {
         }
 
         if (Util.isTrue(3, 100)) { //// rác
-            short id[] = { 20, 19, 441, 442, 443, 444, 445, 446, 447, 1429, 189 };
+            short id[] = {20, 19, 441, 442, 443, 444, 445, 446, 447, 1429, 189};
             int idt = id[Util.nextInt(id.length)];
             ItemMap itemMap = new ItemMap(mob.zone, idt, idt == 189 ? Util.nextInt(15000, 30000) : 1, x, yEnd,
                     player.id);
@@ -158,7 +159,7 @@ public class RewardService {
         return list;
     }
 
-    public static final int[] list_thuc_an = new int[] { 663, 664, 665, 666, 667 };
+    public static final int[] list_thuc_an = new int[]{663, 664, 665, 666, 667};
 
     private void initQuantityGold(ItemMap item) {
         switch (item.itemTemplate.id) {
@@ -187,7 +188,7 @@ public class RewardService {
 
     // chỉ số cơ bản: hp, ki, hồi phục, sđ, crit
     public void initBaseOptionClothes(int tempId, int type, List<ItemOption> list) {
-        int[][] option_param = { { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
+        int[][] option_param = {{-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}};
         switch (type) {
             case 0: // áo
                 option_param[0][0] = 47; // giáp
@@ -339,7 +340,16 @@ public class RewardService {
                         option_param[2][1] = 81;
                         option_param[3][1] = 1;
                         break;
+                    case 1048:
+                    case 1049:
+                    case 1050:
+                        option_param[2][0] = 21; // yêu cầu sức mạnh
+                        option_param[3][0] = 30; // Không thể giao dịch
 
+                        option_param[0][1] = 2000;
+                        option_param[2][1] = 81;
+                        option_param[3][1] = 1;
+                        break;
                 }
                 break;
             case 1: // quần
@@ -978,7 +988,6 @@ public class RewardService {
                         option_param[0][0] = 23;
                         option_param[2][0] = 21; // yêu cầu sức mạnh
                         option_param[3][0] = 30; // không thể gd
-
                         option_param[0][1] = 116;
                         option_param[1][1] = 20000;
                         option_param[2][1] = 81;
@@ -1034,15 +1043,32 @@ public class RewardService {
                         option_param[2][0] = 21; // yêu cầu sức mạnh
                         option_param[3][0] = 30; // không thể gd
 
-                        option_param[0][1] = 19;
+                        option_param[0][1] = 16;
+                        option_param[2][1] = 81;
+                        option_param[3][1] = 1; // không thể gd
+                        break;
+                    case 1060:
+                    case 1061:
+                    case 1062:
+                        option_param[2][0] = 21; // yêu cầu sức mạnh
+                        option_param[3][0] = 30; // không thể gd
+
+                        option_param[0][1] = 18;
                         option_param[2][1] = 81;
                         option_param[3][1] = 1; // không thể gd
                         break;
                 }
                 break;
         }
-
-        if ((tempId >= 555 && tempId <= 567) || (tempId >= 650 && tempId <= 662)) {
+        if ((tempId >= 1048 && tempId <= 1062)) {
+            for (int i = 0; i < option_param.length; i++) {
+                if (option_param[i][0] != -1 && option_param[i][1] != -1) {
+                    {
+                        list.add(new ItemOption(option_param[i][0], (option_param[i][1]+ Util.nextInt(0, option_param[i][1] * 15 / 100))));
+                    }
+                }
+            }
+        } else if ((tempId >= 555 && tempId <= 567) || (tempId >= 650 && tempId <= 662)) {
             int opt = initOptionThanLinhOrHuyDiet(tempId);
             if (opt > -1) {
                 for (int i = 0; i < option_param.length; i++) {
@@ -1055,7 +1081,7 @@ public class RewardService {
                             list.add(new ItemOption(option_param[i][0], (Util.nextInt(option_param[i][1], opt))));
                         } else {
                             list.add(new ItemOption(option_param[i][0], (option_param[i][1]
-                                    + Util.nextInt(-(option_param[i][1] * 10 / 100), option_param[i][1] * 10 / 100))));
+                                    + Util.nextInt(-(option_param[i][1] * 15 / 100), option_param[i][1] * 15 / 100))));
                         }
                     }
                 }
@@ -1066,6 +1092,29 @@ public class RewardService {
                     list.add(new ItemOption(option_param[i][0], (option_param[i][1]
                             + Util.nextInt(-(option_param[i][1] * 10 / 100), option_param[i][1] * 10 / 100))));
                 }
+            }
+        }
+    }
+
+    public void initBaseOptionTinhThach(ItemMap itemMap) {
+        if (itemMap != null) {
+            switch (itemMap.itemTemplate.id) {
+                case 2014:
+                    itemMap.options.add(new ItemOption(77, 3));
+                    break;
+                case 2015:
+                    itemMap.options.add(new ItemOption(103, 3));
+                    break;
+                case 2016:
+                    itemMap.options.add(new ItemOption(108, 3));
+                    itemMap.options.add(new ItemOption(94, 1));
+                    break;
+                case 2017:
+                    itemMap.options.add(new ItemOption(5, 2));
+                    break;
+                case 2018:
+                    itemMap.options.add(new ItemOption(50, 2));
+                    break;
             }
         }
     }
@@ -1189,7 +1238,7 @@ public class RewardService {
         }
         if (giay.contains(itemId)) {
             it.itemOptions.add(new ItemOption(23, Util.highlightsItem(gender == 1, new Random().nextInt(15) + 45))); // ki
-                                                                                                                     // 80-90k
+            // 80-90k
         }
         if (rdtl == itemId) {
             it.itemOptions.add(new ItemOption(14, new Random().nextInt(2) + 13)); // chí mạng 17-19%
