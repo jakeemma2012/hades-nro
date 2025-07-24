@@ -62,17 +62,17 @@ public class PlayerDAO {
             dataPoint.add(1000);// stamina
             dataPoint.add(gender == 0 ? 200 : 100);// hp
             dataPoint.add(0);// defg
-            dataPoint.add(100_000_000);// tn
+            dataPoint.add(2_000);// tn
             dataPoint.add(1000);// maxsta
             dataPoint.add(gender == 2 ? 15 : 10);// damg
-            dataPoint.add(100_000_000);// pow
+            dataPoint.add(2_000);// pow
             dataPoint.add(gender == 0 ? 200 : 100);// hpg
             String point = dataPoint.toJSONString();
 
             JSONArray dataMagicTree = new JSONArray();
             dataMagicTree.add(0);// isupgr
             dataMagicTree.add(new Date().getTime());
-            dataMagicTree.add(10);// LV
+            dataMagicTree.add(1);// LV
             dataMagicTree.add(new Date().getTime());
             dataMagicTree.add(5);// curr_pea
             String magicTree = dataMagicTree.toJSONString();
@@ -92,7 +92,7 @@ public class PlayerDAO {
             int hp = gender == 0 ? 30 : 20;
             int sd = gender == 0 ? 7 : ((gender * 2) + 1);
             int mp = gender == 1 ? 14 : 10;
-            int spl = 5;
+            int spl = 0;
             JSONArray dataBody = new JSONArray();
             for (int i = 0; i < 11; i++) {
                 JSONObject item = new JSONObject();
@@ -102,13 +102,10 @@ public class PlayerDAO {
                 JSONArray poption3 = new JSONArray();
                 switch (i) {
                     case 0:
-                        option.add(107);
-                        option.add(spl);
                         option2.add(47);
                         option2.add(def);
                         poption3.add(30);
                         poption3.add(999);
-                        options.add(option);
                         options.add(option2);
                         options.add(poption3);
                         item.put("temp_id", idAo);
@@ -116,13 +113,10 @@ public class PlayerDAO {
                         item.put("quantity", 1);
                         break;
                     case 1:
-                        option.add(107);
-                        option.add(spl);
                         option2.add(6);
                         option2.add(hp);
                         poption3.add(30);
                         poption3.add(999);
-                        options.add(option);
                         options.add(option2);
                         options.add(poption3);
                         item.put("temp_id", idQuan);
@@ -130,14 +124,11 @@ public class PlayerDAO {
                         item.put("quantity", 1);
                         break;
                     case 2:
-                        option.add(107);
-                        option.add(spl);
                         option2.add(0);
                         option2.add(sd);
                         poption3.add(30);
                         poption3.add(999);
 
-                        options.add(option);
                         options.add(option2);
                         options.add(poption3);
                         item.put("temp_id", idGang);
@@ -145,14 +136,11 @@ public class PlayerDAO {
                         item.put("quantity", 1);
                         break;
                     case 3:
-                        option.add(107);
-                        option.add(spl);
                         option2.add(7);
                         option2.add(mp);
                         poption3.add(30);
                         poption3.add(999);
 
-                        options.add(option);
                         options.add(option2);
                         options.add(poption3);
                         item.put("temp_id", idjay);
@@ -160,14 +148,11 @@ public class PlayerDAO {
                         item.put("quantity", 1);
                         break;
                     case 4:
-                        option.add(107);
-                        option.add(spl);
                         option2.add(14);
                         option2.add(1);
                         poption3.add(30);
                         poption3.add(999);
 
-                        options.add(option);
                         options.add(option2);
                         options.add(poption3);
                         item.put("temp_id", 12);
@@ -324,9 +309,10 @@ public class PlayerDAO {
                 skill.add(skillsArr[i]);
                 skill.add(0);
                 if (i == 0) {
-                    skill.add(7);
-                } else {
-                    skill.add(7);
+                    skill.add(1);
+                } 
+                else {
+                    skill.add(0);
                 }
                 dataSkills.add(skill);
             }
@@ -341,22 +327,27 @@ public class PlayerDAO {
 
             int[] data = new int[0];
             data = PetService.gI().getDataPetNormal();
-            String petInfo = "{\"gender\":\"" + gender
-                    + "\",\"is_mabu\":\"0\",\"level\":\"0\",\"name\":\"$Đệ tử\",\"type_fusion\":\"0\",\"left_fusion\":\"1292015613\",\"status\":\"0\"}";
-            String petPoint = "{\"mp\":\"" + data[1] + "\",\"max_stamina\":\"1000\",\"mpg\":\"" + data[1]
-                    + "\",\"critg\":\"" + data[4] + "\",\"limit_power\":\"0\",\"stamina\":\"1000\",\"hp\":\"" + data[0]
-                    + "\",\"damg\":\"" + data[2] + "\",\"power\":\"2000\",\"defg\":\"" + data[3] + "\",\"hpg\":\""
-                    + data[0] + "\",\"tiem_nang\":\"0\"}";
+            // String petInfo = "{\"gender\":\"" + gender
+            //         + "\",\"is_mabu\":\"0\",\"level\":\"0\",\"name\":\"$Đệ tử\",\"type_fusion\":\"0\",\"left_fusion\":\"1292015613\",\"status\":\"0\"}";
+            // String petPoint = "{\"mp\":\"" + data[1] + "\",\"max_stamina\":\"1000\",\"mpg\":\"" + data[1]
+            //         + "\",\"critg\":\"" + data[4] + "\",\"limit_power\":\"0\",\"stamina\":\"1000\",\"hp\":\"" + data[0]
+            //         + "\",\"damg\":\"" + data[2] + "\",\"power\":\"2000\",\"defg\":\"" + data[3] + "\",\"hpg\":\""
+            //         + data[0] + "\",\"tiem_nang\":\"0\"}";
 
-            String petBody = "[{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
-                    + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]}]";
+            // String petBody = "[{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]},"
+            //         + "{\"quantity\":\"0\",\"create_time\":\"0\",\"temp_id\":\"-1\",\"option\":[]}]";
 
-            String petSkill = "[[\"0\",\"1\"],[\"-1\",\"0\"],[\"-1\",\"0\"],[\"-1\",\"0\"]]";
+            // String petSkill = "[[\"0\",\"1\"],[\"-1\",\"0\"],[\"-1\",\"0\"],[\"-1\",\"0\"]]";
+
+            String petInfo = "{}";
+            String petPoint = "{}";
+            String petBody = "[]";
+            String petSkill = "[]";
 
             JSONArray dataBlackBall = new JSONArray();
             for (int i = 1; i <= 7; i++) {

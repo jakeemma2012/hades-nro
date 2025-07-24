@@ -7,6 +7,7 @@ import nro.consts.ConstPlayer;
 import nro.consts.ConstTask;
 import nro.data.DataGame;
 import nro.dialog.ConfirmDialog;
+import nro.models.Transaction;
 import nro.models.boss.Boss;
 import nro.models.clan.Buff;
 import nro.models.item.CaiTrang;
@@ -36,6 +37,9 @@ import nro.services.*;
 import nro.services.func.ChangeMapService;
 import nro.services.func.CombineNew;
 import nro.services.func.PVPServcice;
+import nro.services.func.Trade;
+import nro.services.func.TransactionService;
+import nro.services.func.UseItem;
 import nro.utils.Log;
 import nro.utils.SkillUtil;
 import nro.utils.Util;
@@ -142,6 +146,8 @@ public class Player {
 
     public int DaysTheTuan;
     public long lastTimeRewardsTheTuan;
+
+    public boolean isSellingGold;
 
     public ListFriendEnemy<Friend> friends;
     public ListFriendEnemy<Enemy> enemies;
@@ -254,7 +260,7 @@ public class Player {
         playerIntrinsic = new IntrinsicPlayer(this);
         rewardBlackBall = new RewardBlackBall(this);
         effectFlagBag = new EffectFlagBag(this);
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
         iDMark = new IDMark();
         combineNew = new CombineNew();
         playerTask = new TaskPlayer(this);
@@ -270,7 +276,7 @@ public class Player {
 
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     public short getPowerPoint() {
         return powerPoint;
     }
@@ -312,7 +318,7 @@ public class Player {
         }
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     public void setSession(Session session) {
         this.session = session;
     }
@@ -389,28 +395,33 @@ public class Player {
 
                     BlackBallWar.gI().update(this);
                     if (this.isPl()) {
-                        if (this.itemTime.lastTimeNauCa != 0 && Util.canDoWithTime(this.itemTime.lastTimeNauCa, 6000)) {
-                            this.itemTime.lastTimeNauCa = 0;
-                        }
-                        if (this.zone.map.mapId == 215) {
-                            if (TimeUtil.getCurrHour() % 2 != 0) {
-                                ChangeMapService.gI().changeMapBySpaceShip(this, 21 + this.gender, -1, -1);
-                                Service.getInstance().sendThongBao(this, "Khu vực chỉ hoạt động vào giờ chẵn ! Phi thuyền sẽ tới đón bạn về nhà !");
-                            }
-                        }
-//                        if (MapService.gI().isMapYadart(this.zone.map.mapId)) {
-//                            if (!this.itemTime.isTimeYardart) {
-//                                ChangeMapService.gI().changeMapBySpaceShip(this, 5, -1, -1);
-//                                Service.getInstance().sendThongBao(this, "Thời gian Yardat của bạn đã hết , tàu sẽ vận chuyển bạn về đảo !");
-//                            }
-//                        }
-//                        PhubanMabu.gI().update(this);
-//                        MabuWar.gI().update(this);
-//                        MabuWar14h.gI().update(this);
-//                        checkPlayerInMap();
-//                        if (Util.canDoWithTime(lastTimeUpdate, 60000)) {
-//                            this.playerTask.achivements.get(ConstAchive.HOAT_DONG_CHAM_CHI).count++;
-//                        }
+                        // if (MapService.gI().isMapYadart(this.zone.map.mapId)) {
+                        // if (!this.itemTime.isTimeYardart) {
+                        // ChangeMapService.gI().changeMapBySpaceShip(this, 5, -1, -1);
+                        // Service.getInstance().sendThongBao(this, "Thời gian Yardat của bạn đã hết ,
+                        // tàu sẽ vận chuyển bạn về đảo !");
+                        // }
+                        // }
+                        // PhubanMabu.gI().update(this);
+                        // MabuWar.gI().update(this);
+                        // MabuWar14h.gI().update(this);
+                        // checkPlayerInMap();
+                        // if (Util.canDoWithTime(lastTimeUpdate, 60000)) {
+                        // this.playerTask.achivements.get(ConstAchive.HOAT_DONG_CHAM_CHI).count++;
+                        // }
+                    }
+                    if (isSellingGold) {
+                        TransactionService.gI().cancelTrade(this);
+                            UseItem.gI().handleBanVang(this, 0);
+                        // Item tv = InventoryService.gI().findItemBag(this, 457);
+                        // if (tv != null) {
+                        //     TransactionService.gI().cancelTrade(this);
+                        //     InventoryService.gI().subQuantityItemsBag(this, tv, 1);
+                        //     this.inventory.gold += 500_000_000;
+                        //     Service.getInstance().sendMoney(this);
+                        //     Service.getInstance().sendThongBao(this, "Bạn vừa bán 1 thỏi vàng tự động và nhận được "
+                        //             + Util.numberToMoney(500_000_000L) + " vàng !");
+                        // }
                     }
                     if (isGotoFuture && Util.canDoWithTime(lastTimeGoToFuture, 6000)) {
                         ChangeMapService.gI().changeMapBySpaceShip(this, 102, -1, Util.nextInt(60, 200));
@@ -486,7 +497,8 @@ public class Player {
                     + "|7|nếu còn tiếp tục tái phạm sẽ khóa vĩnh viễn");
         }
     }
-    //--------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------
     /*
      * {380, 381, 382}: ht lưỡng long nhất thể xayda trái đất
      * {383, 384, 385}: ht porata xayda trái đất
@@ -496,36 +508,36 @@ public class Player {
      * {867, 878, 869}: ht c2 xayda
      */
     private static final short[][] idOutfitFusion = {
-        {380, 381, 382},//ht lưỡng long nhất thể xayda trái đất
-        {383, 384, 385},//ht porata xayda trái đất
-        {391, 392, 393},//ht namếc
+            { 380, 381, 382 }, // ht lưỡng long nhất thể xayda trái đất
+            { 383, 384, 385 }, // ht porata xayda trái đất
+            { 391, 392, 393 }, // ht namếc
 
-        {1335, 1336, 1337}, //ht c3 trái đất
-        {1329, 1330, 1331},//ht c3 namếc
-        {1332, 1333, 1334},//ht c3 xayda
+            { 1335, 1336, 1337 }, // ht c3 trái đất
+            { 1329, 1330, 1331 }, // ht c3 namếc
+            { 1332, 1333, 1334 }, // ht c3 xayda
 
-        {1335, 1336, 1337}, //ht c3 trái đất
-        {1329, 1330, 1331},//ht c3 namếc
-        {1332, 1333, 1334},//ht c3 xayda
+            { 1335, 1336, 1337 }, // ht c3 trái đất
+            { 1329, 1330, 1331 }, // ht c3 namếc
+            { 1332, 1333, 1334 }, // ht c3 xayda
 
-        {1335, 1336, 1337}, //ht c3 trái đất
-        {1329, 1330, 1331},//ht c3 namếc
-        {1332, 1333, 1334},//ht c3 xayda
+            { 1335, 1336, 1337 }, // ht c3 trái đất
+            { 1329, 1330, 1331 }, // ht c3 namếc
+            { 1332, 1333, 1334 }, // ht c3 xayda
 
-        {1559, 1560, 1561},
-        {1562, 1563, 1564},
-        {1565, 1566, 1567},};
+            { 1559, 1560, 1561 },
+            { 1562, 1563, 1564 },
+            { 1565, 1566, 1567 }, };
 
     private static final short[][] headHoaSieuThan = {
-        {1380, 1391, 1394, 1397, 1400},
-        {1403, 1406, 1409, 1412, 1415},
-        {1375, 1418, 1421, 1424, 1427}
+            { 1380, 1391, 1394, 1397, 1400 },
+            { 1403, 1406, 1409, 1412, 1415 },
+            { 1375, 1418, 1421, 1424, 1427 }
     };
 
     private static final short[][] idHoaHinh = {
-        {1380, 1384, 1385},
-        {1386, 1389, 1390},
-        {1375, 1378, 1379}};
+            { 1380, 1384, 1385 },
+            { 1386, 1389, 1390 },
+            { 1375, 1378, 1379 } };
 
     public byte getEffFront() {
         if (this.inventory.itemsBody.isEmpty() || this.inventory.itemsBody.size() < 10) {
@@ -541,12 +553,12 @@ public class Player {
         }
         int[] levels = new int[5];
         ItemOption[] options = new ItemOption[5];
-        Item[] items = new Item[]{
-            this.inventory.itemsBody.get(0),
-            this.inventory.itemsBody.get(1),
-            this.inventory.itemsBody.get(2),
-            this.inventory.itemsBody.get(3),
-            this.inventory.itemsBody.get(4)
+        Item[] items = new Item[] {
+                this.inventory.itemsBody.get(0),
+                this.inventory.itemsBody.get(1),
+                this.inventory.itemsBody.get(2),
+                this.inventory.itemsBody.get(3),
+                this.inventory.itemsBody.get(4)
         };
         for (int i = 0; i < items.length; i++) {
             Item item = items[i];
@@ -590,7 +602,8 @@ public class Player {
         }
         CollectionBook book = getCollectionBook();
         if (book != null) {
-            Card card = book.getCards().stream().filter(t -> t.isUse() && t.getCardTemplate().getAura() != -1).findAny().orElse(null);
+            Card card = book.getCards().stream().filter(t -> t.isUse() && t.getCardTemplate().getAura() != -1).findAny()
+                    .orElse(null);
             if (card != null) {
                 return (byte) card.getCardTemplate().getAura();
             }
@@ -785,13 +798,14 @@ public class Player {
                 return this.inventory.itemsBody.get(7).template.part;
             }
         }
-//        if (this.inventory.itemsBody.size() >= 8
-//                && this.inventory.itemsBody.get(7).isNotNullItem()) {
-//            FlagBag f = FlagBagService.gI().getFlagBagByName(this.inventory.itemsBody.get(7).template.name);
-//            if (f != null) {
-//                return (short) f.id;
-//            }
-//        }
+        // if (this.inventory.itemsBody.size() >= 8
+        // && this.inventory.itemsBody.get(7).isNotNullItem()) {
+        // FlagBag f =
+        // FlagBagService.gI().getFlagBagByName(this.inventory.itemsBody.get(7).template.name);
+        // if (f != null) {
+        // return (short) f.id;
+        // }
+        // }
         if (TaskService.gI().getIdTask(this) == ConstTask.TASK_3_2) {
             return 28;
         }
@@ -868,11 +882,11 @@ public class Player {
         return null;
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     public long injured(Player plAtt, long damage, boolean piercing, boolean isMobAttack) {
-//        if (this.getSession() != null && this.isAdmin()) {
-//            return 0;
-//        }
+        // if (this.getSession() != null && this.isAdmin()) {
+        // return 0;
+        // }
         int mstChuong = this.nPoint.mstChuong;
         int giamst = this.nPoint.tlGiamst;
 
@@ -895,7 +909,8 @@ public class Player {
                     return 0;
                 }
             }
-            if (isMobAttack && (this.charms.tdBatTu > System.currentTimeMillis() || this.itemTime.isMaTroi) && damage >= this.nPoint.hp) {
+            if (isMobAttack && (this.charms.tdBatTu > System.currentTimeMillis() || this.itemTime.isMaTroi)
+                    && damage >= this.nPoint.hp) {
                 damage = this.nPoint.hp - 1;
             }
             damage = this.nPoint.subDameInjureWithDeff(damage);
@@ -914,11 +929,11 @@ public class Player {
             if (this.effectSkill.isHoldMabu) {
                 damage = 1;
             }
-//            if(this.isPl() && this.getSession().isAdmin){
-//                damage =1 ;
-//            }
-            if(plAtt != null && plAtt.isBoss){
-                    damage = this.nPoint.hpMax * 10/100;
+            // if(this.isPl() && this.getSession().isAdmin){
+            // damage =1 ;
+            // }
+            if (plAtt != null && plAtt.isBoss) {
+                damage = this.nPoint.hpMax * 10 / 100;
             }
             this.nPoint.subHP(damage);
             if (this.effectSkill.isHoldMabu && Util.isTrue(30, 150)) {
@@ -940,33 +955,33 @@ public class Player {
     }
 
     public void setDie(Player plAtt) {
-//        if (this.effectSkill.isMonkey) {
-//            rewardDuoiKhi(plAtt);
-//        }
+        // if (this.effectSkill.isMonkey) {
+        // rewardDuoiKhi(plAtt);
+        // }
         if (this.nPoint.power >= 1_000_000) {
             long powersub = this.nPoint.power / 10000;
             nPoint.powerSub(powersub);
         }
-        //xóa phù
+        // xóa phù
         if (this.effectSkin.xHPKI > 1) {
             this.effectSkin.xHPKI = 1;
             Service.getInstance().point(this);
         }
-        //xóa tụ skill đặc biệt
+        // xóa tụ skill đặc biệt
         this.playerSkill.prepareQCKK = false;
         this.playerSkill.prepareLaze = false;
         this.playerSkill.prepareTuSat = false;
-        //xóa hiệu ứng skill
+        // xóa hiệu ứng skill
         this.effectSkill.removeSkillEffectWhenDie();
         //
         nPoint.setHp(0);
         nPoint.setMp(0);
-        //xóa trứng
+        // xóa trứng
         if (this.mobMe != null) {
             this.mobMe.mobMeDie();
         }
         Service.getInstance().charDie(this);
-        //add kẻ thù
+        // add kẻ thù
         if (!this.isPet && !this.isBoss && plAtt != null && !plAtt.isPet && !plAtt.isBoss) {
             if (!plAtt.itemTime.isActive(385)) {
                 FriendAndEnemyService.gI().addEnemy(this, plAtt);
@@ -985,16 +1000,16 @@ public class Player {
                 }
             }
         }
-        //kết thúc pk
+        // kết thúc pk
         PVPServcice.gI().finishPVP(this, PVP.TYPE_DIE);
         BlackBallWar.gI().dropBlackBall(this);
         if (isHoldNamecBall) {
             NamekBallWar.gI().dropBall(this);
         }
-//        if (isHoldNamecBallTranhDoat) {
-//            TranhNgocService.getInstance().dropBall(this, (byte) -1);
-//            TranhNgocService.getInstance().sendUpdateLift(this);
-//        }
+        // if (isHoldNamecBallTranhDoat) {
+        // TranhNgocService.getInstance().dropBall(this, (byte) -1);
+        // TranhNgocService.getInstance().sendUpdateLift(this);
+        // }
     }
 
     public void rewardDuoiKhi(Player pl) {
@@ -1002,7 +1017,8 @@ public class Player {
             int x = this.location.x;
             int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
             ItemMap itemMap = new ItemMap(this.zone, 579, 1, x, y, pl.id);
-            RewardService.gI().initBaseOptionClothes(itemMap.itemTemplate.id, itemMap.itemTemplate.type, itemMap.options);
+            RewardService.gI().initBaseOptionClothes(itemMap.itemTemplate.id, itemMap.itemTemplate.type,
+                    itemMap.options);
             if (itemMap != null) {
                 Service.getInstance().dropItemMap(zone, itemMap);
             }
@@ -1014,14 +1030,15 @@ public class Player {
             int x = this.location.x;
             int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
             ItemMap itemMap = new ItemMap(this.zone, 516, 1, x, y, pl.id);
-            RewardService.gI().initBaseOptionClothes(itemMap.itemTemplate.id, itemMap.itemTemplate.type, itemMap.options);
+            RewardService.gI().initBaseOptionClothes(itemMap.itemTemplate.id, itemMap.itemTemplate.type,
+                    itemMap.options);
             if (itemMap != null) {
                 Service.getInstance().dropItemMap(zone, itemMap);
             }
         }
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     public void setClanMember() {
         if (this.clanMember != null) {
             this.clanMember.powerPoint = this.nPoint.power;

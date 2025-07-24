@@ -32,29 +32,6 @@ public class Broly extends Boss {
     boolean xhpnext;
 
     static final int MAX_HP = 16777080;
-    private static final int DIS_ANGRY = 100;
-
-    private static final int HP_CREATE_SUPER_1 = 1000000;
-    private static final int HP_CREATE_SUPER_2 = 2000000;
-    private static final int HP_CREATE_SUPER_3 = 4000000;
-    private static final int HP_CREATE_SUPER_4 = 6000000;
-    private static final int HP_CREATE_SUPER_5 = 7000000;
-    private static final int HP_CREATE_SUPER_6 = 10000000;
-    private static final int HP_CREATE_SUPER_7 = 13000000;
-    private static final int HP_CREATE_SUPER_8 = 14000000;
-    private static final int HP_CREATE_SUPER_9 = 15000000;
-    private static final int HP_CREATE_SUPER_10 = 16000000;
-
-    private static final byte RATIO_CREATE_SUPER_10 = 10;
-    private static final byte RATIO_CREATE_SUPER_20 = 20;
-    private static final byte RATIO_CREATE_SUPER_30 = 30;
-    private static final byte RATIO_CREATE_SUPER_40 = 40;
-    private static final byte RATIO_CREATE_SUPER_50 = 50;
-    private static final byte RATIO_CREATE_SUPER_60 = 60;
-    private static final byte RATIO_CREATE_SUPER_70 = 70;
-    private static final byte RATIO_CREATE_SUPER_80 = 80;
-    private static final byte RATIO_CREATE_SUPER_90 = 90;
-    private static final byte RATIO_CREATE_SUPER_100 = 100;
 
     private final Map angryPlayers;
     private final List<Player> playersAttack;
@@ -88,6 +65,7 @@ public class Broly extends Boss {
                                 Util.nextInt(10) % 2 == 0 ? pl.location.y : pl.location.y - Util.nextInt(0, 50), false);
                     }
                     this.effectCharger();
+                    checkIncreaseHp();
                     try {
                         SkillService.gI().useSkill(this, pl, null);
                     } catch (Exception e) {
@@ -149,24 +127,12 @@ public class Broly extends Boss {
                     }
                 }
             }
-            if (giamst > 0) {
-                damage -= nPoint.calPercent(damage, giamst);
-            }
 
             if (plAtt != null && plAtt.getSession() != null && plAtt.isAdmin()) {
                 damage = nPoint.hpMax;
             }
 
             this.nPoint.subHP(damage);
-
-            if (!xhpnext && this.nPoint.hp > this.nPoint.hpMax * 2 / 3) {
-                xhpnext = true;
-            }
-            if (this.nPoint.hp <= this.nPoint.hpMax / 2 && xhpnext) {
-                this.nPoint.hpMax *= 1.5;
-                this.nPoint.dame = this.nPoint.dame + this.nPoint.hpMax / 50;
-                xhpnext = false;
-            }
 
             if (isDie()) {
                 setDie(plAtt);
@@ -179,9 +145,7 @@ public class Broly extends Boss {
 //                }
                 if (this.nPoint.hpMax >= 1_000_000 && !isSuper) {
                     long hpbroly = (this.nPoint.hpMax / 100) * 150;
-                    if (hpbroly > 18_000_000) {
-                        hpbroly = 18_000_000;
-                    }
+                    hpbroly = 16_070_777;
                     long damebroly = (this.nPoint.dame / 100) * 150;
                     if (damebroly > 1_000_000) {
                         damebroly = 1_000_000;
@@ -206,7 +170,7 @@ public class Broly extends Boss {
                     );
                     new SuperBroly(BossFactory.SUPER_BROLY, superBroly);
                 } else {
-                    long hpbroly = this.nPoint.hpMax + Util.nextInt(50_000, 100_000);
+                    long hpbroly = this.nPoint.hpMax + Util.nextInt(50_000, 1_000_000);
                     if (hpbroly < 500) {
                         hpbroly = 500;
                     }
@@ -304,6 +268,17 @@ public class Broly extends Boss {
     }
 
 
+    public void checkIncreaseHp(){
+        if (!xhpnext && this.nPoint.hp > this.nPoint.hpMax * 2 / 3) {
+            xhpnext = true;
+        }
+        if (this.nPoint.hp <= this.nPoint.hpMax / 2 && xhpnext) {
+            this.nPoint.hpMax *= 1.5;
+            this.nPoint.dame = this.nPoint.dame + this.nPoint.hpMax / 50;
+            xhpnext = false;
+        }
+    }
+
     @Override
     public void checkPlayerDie(Player pl) {
         if (pl.isDie()) {
@@ -358,11 +333,10 @@ public class Broly extends Boss {
 
     @Override
     public void rewards(Player pl) {
-        if (true) {
-            BossFactory.createBoss(BossFactory.SUPER_BROLY);
-            return;
-        }
-        generalRewards(pl);
+        // if (true) {
+        //     BossFactory.createBoss(BossFactory.SUPER_BROLY);
+        //     return;
+        // }
     }
 
     @Override

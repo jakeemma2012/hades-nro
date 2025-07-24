@@ -49,7 +49,6 @@ public class DBService {
         SECOND_WAIT_LOGIN = 5;
         MAX_PER_IP = 10;
         MAX_PLAYER = 1500;
-        RATE_EXP_SERVER = 14;
         EVENT_SEVER = 0;
         SERVER_NAME = "NroHades";
         DOMAIN = "NroHades.com";

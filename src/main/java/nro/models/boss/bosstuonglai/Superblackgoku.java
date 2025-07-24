@@ -103,7 +103,7 @@ public class Superblackgoku extends Boss {
         } else {
             this.targetCountChangePlayerAttack = Util.nextInt(10, 20);
             this.countChangePlayerAttack = 0;
-            plAttack = this.zone.getRandomPlayerInMap();
+            plAttack = this.zone.getRandomPlayerInMapNotMiniPet();
         }
         return plAttack;
     }

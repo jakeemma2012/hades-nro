@@ -285,12 +285,12 @@ public class BossFactory {
                 createBoss(XEN_BO_HUNG_1);
                 createBoss(ANDROID_15);
 
-//                createBoss(KHI_6);
-//                createBoss(HOAHONG);
+                // createBoss(KHI_6);
+                // createBoss(HOAHONG);
 
-                // for (int i = 0; i < 10; i++) {
-                // createBoss(SUPER_BROLY);
-                // }
+                for (int i = 0; i < 5; i++) {
+                    createBoss(BROLY);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -443,6 +443,9 @@ public class BossFactory {
                 break;
             case MABU_BONGTOI:
                 boss = new Bu_Bongtoi();
+                break;
+            case BROLY:
+                boss = new Broly();
                 break;
             case SUPER_BROLY:
                 boss = new SuperBroly();

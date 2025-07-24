@@ -33,9 +33,8 @@ public class ThuongDe extends Npc {
             switch (mapId) {
                 case 45:
                     this.createOtherMenu(player, ConstNpc.BASE_MENU,
-                            "Con muốn thực hiện quay vòng quay sao ?\n"
-                                    + "Con đang có tổng thực hiện " + player.pointVongQuayThuongDe + " lần quay",
-                            "Quay số\nmay mắn", "Top\n vòng quay", "Mốc \n vòng quay","Đến Kaio");
+                            "Con muốn thực hiện quay vòng quay sao ?",
+                            "Đến Kaio", "Quay số\nmay mắn");
                     break;
                 case ConstMap.CON_DUONG_RAN_DOC:
                     if (player.zone instanceof ZSnakeRoad) {
@@ -57,9 +56,13 @@ public class ThuongDe extends Npc {
                 if (player.iDMark.isBaseMenu()) {
                     switch (select) {
                         case 0:
+                            ChangeMapService.gI().changeMapBySpaceShip(player, 48, -1, 372);
+                            break;
+                        case 1:
+
                             // if (player.getSession().actived) {
                             this.createOtherMenu(player, ConstNpc.MENU_CHOOSE_LUCKY_ROUND,
-                                    "Con muốn làm gì nào?", "Quay bằng\nthỏi vàng", "Quay nhanh\n100 lần",
+                                    "Con muốn làm gì nào?", "Vòng quay", "Quay nhanh\n100 lần",
                                     "Rương phụ\n("
                                             + (player.inventory.itemsBoxCrackBall.size()
                                                     - InventoryService.gI().getCountEmptyListItem(
@@ -69,16 +72,6 @@ public class ThuongDe extends Npc {
                             // } else {
                             // this.npcChat(player, "|8|Chức năng chỉ dành cho mở thành viên !");
                             // }
-                            break;
-
-                        case 1:
-                            Service.getInstance().showTopCa(player);
-                            break;
-                        case 2:
-                            this.OpenMocRewards(player);
-                            break;
-                        case 3:
-                            ChangeMapService.gI().changeMapBySpaceShip(player,48,-1,372);
                             break;
                         // case 1:
                         // ChangeMapService.gI().changeMapBySpaceShip(player, 48, -1, 354);

@@ -410,11 +410,11 @@ public class Controller {
                     if (player != null) {
                         // finishLoadMap
                         ChangeMapService.gI().finishLoadMap(player);
-                        // if (player.zone.map.mapId == (21 + player.gender)) {
-                        // if (player.mabuEgg != null) {
-                        // player.mabuEgg.sendMabuEgg();
-                        // }
-                        // }
+                        if (player.zone.map.mapId == (21 + player.gender)) {
+                            if (player.mabuEgg != null) {
+                                player.mabuEgg.sendMabuEgg();
+                            }
+                        }
                         if (player.zone.map.mapId == 191) {
                             if (player.egglinhthu != null) {
                                 player.egglinhthu.sendEggLinhThu();
@@ -577,7 +577,7 @@ public class Controller {
                             player.nPoint.increasePoint(type, point);
                         }
                     }
-                    break;
+                        break;
                     case 18: {
                         byte type = _msg.reader().readByte();
                         short point = _msg.reader().readShort();
@@ -585,11 +585,16 @@ public class Controller {
                             player.pet.nPoint.increasePoint(type, point);
                         }
                     }
-                    break;
+                        break;
                     case 64:
                         int playerId = _msg.reader().readInt();
                         int menuId = _msg.reader().readShort();
                         SubMenuService.gI().controller(player, playerId, menuId);
+                        break;
+                    case 99:
+                        if (_session.player != null) {
+                            Service.getInstance().setSellingGold(_session.player);
+                        }
                         break;
                     default:
                         break;

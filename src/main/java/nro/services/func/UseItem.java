@@ -1,6 +1,7 @@
 package nro.services.func;
 
 import nro.consts.*;
+import nro.data.DataGame;
 import nro.dialog.MenuDialog;
 import nro.dialog.MenuRunable;
 import nro.event.Event;
@@ -2709,7 +2710,7 @@ public class UseItem {
 
     private void quaTrung(Player pl, Item item) {
         if (pl.mabuEgg == null) {
-            CombineServiceNew.gI().sendEffectOpenItem(pl, item.template.iconID, item.template.iconID);
+            // CombineServiceNew.gI().sendEffectOpenItem(pl, item.template.iconID, item.template.iconID);
             InventoryService.gI().subQuantityItemsBag(pl, item, 1);
             InventoryService.gI().sendItemBags(pl);
             MabuEgg.createMabuEgg(pl);
@@ -2717,7 +2718,7 @@ public class UseItem {
                 ChangeMapService.gI().changeMapInYard(pl, pl.gender * 7, 1, 300);
             }
             Service.getInstance().sendThongBao(pl,
-                    "Sử dụng quả trứng thành công, vui lòng thoát game và về nhà để xem");
+                    "Bạn nhận được Quả trứng, Hãy kiểm tra tại nhà !!");
         } else {
             Service.getInstance().sendThongBao(pl, "Bạn đang có trứng ở nhà rồi");
         }
@@ -3730,6 +3731,8 @@ public class UseItem {
             int[] sl = {1,10,20};
             if(InventoryService.gI().getQuantity(player,457) >= sl[index]){
                 if(player.inventory.gold + (500_000_000L * sl[index]) < Inventory.LIMIT_GOLD ){
+                    InventoryService.gI().subQuantityItemsBag(player, 457, sl[index]);
+                    InventoryService.gI().sendItemBags(player);
                     player.inventory.gold += (500_000_000L * sl[index]);
                     Service.getInstance().sendThongBao(player,"Bán thành công x" + sl[index] + " thành " + Util.numberToMoney(500_000_000L * sl[index]));
                     PlayerService.gI().sendInfoHpMpMoney(player);

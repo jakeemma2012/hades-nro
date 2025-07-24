@@ -2,6 +2,7 @@ package nro.models.npc.specialnpc;
 
 import nro.services.func.ChangeMapService;
 import nro.services.PetService;
+import nro.data.DataGame;
 import nro.models.player.Player;
 import nro.utils.Util;
 import nro.server.io.Message;
@@ -10,7 +11,7 @@ import nro.utils.Log;
 
 public class MabuEgg {
 
-//    private static final long DEFAULT_TIME_DONE = 7776000000L;
+    // private static final long DEFAULT_TIME_DONE = 7776000000L;
     private static final long DEFAULT_TIME_DONE = 86400000L;
 
     private Player player;
@@ -32,20 +33,20 @@ public class MabuEgg {
     public void sendMabuEgg() {
         Message msg;
         try {
-//            Message msg = new Message(-117);
-//            msg.writer().writeByte(100);
-//            player.sendMessage(msg);
-//            msg.cleanup();
+            // Message msg = new Message(-117);
+            // msg.writer().writeByte(100);
+            // player.sendMessage(msg);
+            // msg.cleanup();
             msg = new Message(-122);
             msg.writer().writeShort(this.id);
             msg.writer().writeByte(1);
-            msg.writer().writeShort(21477);
+            msg.writer().writeShort(4664);
             msg.writer().writeByte(0);
             msg.writer().writeInt(this.getSecondDone());
             this.player.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
-            Log.error(MabuEgg.class, e);
+            e.printStackTrace();
         }
     }
 
@@ -57,42 +58,18 @@ public class MabuEgg {
     public void openEgg(int gender) {
         if (this.player.pet != null) {
             try {
-                destroyEgg();
-                Thread.sleep(4000);
-                int rd = Util.nextInt(0, 2);
-                if (this.player.pet == null) {
-                    switch (rd) {
-                        case 0:
-                            PetService.gI().createBuGayPet(this.player, gender);
-
-                            break;
-                        case 1:
-                            PetService.gI().changeBuGayPet(this.player, gender);
-                            break;
-                        case 2:
-                            PetService.gI().changeKidBuPet(this.player, gender);
-                            break;
-                        default:
-                            break;
-                    }
+                // destroyEgg();
+                // Thread.sleep(4000);
+                Service.getInstance().sendEffectHideNPC(player, (byte)50, (byte)0);
+                if (player.pet != null) {
+                    PetService.gI().changeMabuPet(this.player, gender);
                 } else {
-                    switch (rd) {
-                        case 0:
-                            PetService.gI().changeBuGayPet(this.player, gender);
-                            break;
-                        case 1:
-                            PetService.gI().changeMabuPet(this.player, gender);
-                            break;
-                        case 2:
-                            PetService.gI().changeKidBuPet(this.player, gender);
-                            break;
-                        default:
-                            break;
-                    }
+                    PetService.gI().createBuGayPet(this.player, gender);
                 }
                 ChangeMapService.gI().changeMapInYard(this.player, this.player.gender * 7, -1, Util.nextInt(300, 500));
                 player.mabuEgg = null;
             } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             Service.getInstance().sendThongBao(player, "Yêu cầu phải có đệ tử");

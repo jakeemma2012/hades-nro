@@ -22,15 +22,7 @@ public class BoMong extends Npc {
     @Override
     public void openBaseMenu(Player player) {
         if (canOpenNpc(player)) {
-            if (this.mapId == 47 || this.mapId == 84) {
-                this.createOtherMenu(player, ConstNpc.BASE_MENU, "Tất cả chỉ số của danh hiệu hiện tại trong game !\n"
-                        + "Danh hiệu đàn em Phước Tv: 5% hp ki sd\n"
-                        + "Danh hiệu Trùm 7 Sao: 10% hp ki sd\n"
-                        + "Danh hiệu Trùm 8 Sao: 20% hp ki sd\n"
-                        + "Danh hiệu Dân Chơi Cấp 7: 10% hp ki sd\n"
-                        + "Danh hiệu Dân Chơi Cấp 8: 20% hp ki sd",
-                        "Đóng");
-            }
+            this.createOtherMenu(player, ConstNpc.IGNORE_MENU, "Xin chào? Cậu muốn tôi giúp gì sao?", "Đóng");
         }
     }
 

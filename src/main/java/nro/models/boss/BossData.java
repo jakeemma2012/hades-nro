@@ -347,7 +347,7 @@ public class BossData {
             Boss.DAME_PERCENT_HP_HUND, // type dame
             Boss.HP_NORMAL, // type hp
             1, // dame
-            new long[][]{{100, 1000}, {1000, 100000}, {100000, 1000000}, {1000000, 2000000}}, // hp
+            new long[][]{{100, 1000}, {1000, 100000}, {100000, 1000000}}, // hp
             new short[]{291, 292, 293}, // outfit
             new short[]{5, 6, 27, 28, 29, 30, 13, 10, 31, 32, 33, 34, 20, 19, 35, 36, 37, 38}, // map
             // join
@@ -2454,7 +2454,7 @@ public class BossData {
             _15_PHUT);
 
     public static final BossData GRANOLA = new BossData(
-            "Granola %1", // name
+            "Granola", // name
             ConstPlayer.XAYDA, // gender
             Boss.DAME_NORMAL, // type dame
             Boss.HP_NORMAL, // type hp
@@ -2474,7 +2474,7 @@ public class BossData {
             _0_GIAY);
 
     public static final BossData ELEC = new BossData(
-            "Elec %1", // name
+            "Elec", // name
             ConstPlayer.XAYDA, // gender
             Boss.DAME_NORMAL, // type dame
             Boss.HP_NORMAL, // type hp
@@ -2494,7 +2494,7 @@ public class BossData {
             _0_GIAY);
 
     public static final BossData OLI = new BossData(
-            "Oli %1", // name
+            "Oli", // name
             ConstPlayer.XAYDA, // gender
             Boss.DAME_NORMAL, // type dame
             Boss.HP_NORMAL, // type hp
@@ -2514,7 +2514,7 @@ public class BossData {
             _0_GIAY, true);
 
     public static final BossData MACKIE = new BossData(
-            "Mackie %1", // name
+            "Mackie", // name
             ConstPlayer.XAYDA, // gender
             Boss.DAME_NORMAL, // type dame
             Boss.HP_NORMAL, // type hp
@@ -2534,7 +2534,7 @@ public class BossData {
             _0_GIAY, true);
 
     public static final BossData GAS = new BossData(
-            "Gas %1", // name
+            "Gas", // name
             ConstPlayer.XAYDA, // gender
             Boss.DAME_NORMAL, // type dame
             Boss.HP_NORMAL, // type hp

@@ -62,9 +62,6 @@ public class UpdateEffChar {
         }
         
         if(player.isPl()) {
-            if (player.getSession().actived) {
-                Service.getInstance().addEffectChar(player, 2214, 1, -1, 50, -1, -6, -20);
-            }
              switch (player.name) {
                 case "tienkosai": // top 1
                 case "duckdie":

@@ -229,7 +229,7 @@ public class Service {
             msg.writer().writeByte(1);
             msg.writer().writeShort(smallId);
             msg.writer().writeByte(1);
-            int[] fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
+            int[] fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
             msg.writer().writeByte(fr.length);
             for (int i = 0; i < fr.length; i++) {
                 msg.writer().writeByte(fr[i]);
@@ -580,10 +580,18 @@ public class Service {
                     String[] parts = text.split(" ");
                     int gender = Integer.parseInt(parts[1]);
                     int lv = Integer.parseInt(parts[2]);
+                    int kh = -1;
+                    try {
+                        kh = Integer.parseInt(parts[3]);
+                    } catch (Exception e) {
 
+                    }
                     for (int i = 0; i < 5; i++) {
                         Item vp = ItemService.gI().createNewItem(ConstItem.doSKHVip[i][gender][lv]);
                         RewardService.gI().initBaseOptionClothes(vp);
+                        if(kh != -1){
+                            RewardService.gI().initExactlyActivationOption(gender, kh,vp.itemOptions);
+                        }
                         InventoryService.gI().addItemBag(player, vp, 1);
                         InventoryService.gI().sendItemBags(player);
                     }
@@ -728,8 +736,8 @@ public class Service {
             } else if (text.equals("admin")) {
                 NpcService.gI().createMenuConMeo(player, ConstNpc.MENU_ADMIN, -1,
                         "Quản trị admin " + Manager.DOMAIN
-                        + "\n|1|Online: " + Client.gI().getPlayers().size() + "\n"
-                        + "|4|Thread: " + Thread.activeCount() + "\n",
+                                + "\n|1|Online: " + Client.gI().getPlayers().size() + "\n"
+                                + "|4|Thread: " + Thread.activeCount() + "\n",
                         "Ngọc rồng", "Log check", "Bảo trì", "Tìm kiếm\nngười chơi", "Call\nBoss", "Đệ tử !", "Đóng");
                 return;
             } else if (text.equals("toado")) {
@@ -822,6 +830,9 @@ public class Service {
                 }
                 return;
             }
+        }
+        if (text.equals("banvang")) {
+            setSellingGold(player);
         }
         if (text.startsWith("ten con la ")) {
             PetService.gI().changeNamePet(player, text.replaceAll("ten con la ", ""));
@@ -1545,8 +1556,8 @@ public class Service {
         return (int) n / tiLeXanhDo;
     }
 
-    public static final int[] flagTempId = {363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747};
-    public static final int[] flagIconId = {2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325};
+    public static final int[] flagTempId = { 363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747 };
+    public static final int[] flagIconId = { 2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325 };
 
     public void openFlagUI(Player pl) {
         Message msg;
@@ -2445,6 +2456,12 @@ public class Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setSellingGold(Player player) {
+        player.isSellingGold = !player.isSellingGold;
+        Service.getInstance().sendThongBao(player, "Bán vàng [" + (player.isSellingGold ? "ON" : "OFF") + "]");
+
     }
 
     public static void ShowTopNap(Player player) {

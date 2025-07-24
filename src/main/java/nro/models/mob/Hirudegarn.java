@@ -6,6 +6,7 @@
 package nro.models.mob;
 
 import nro.consts.Cmd;
+import nro.models.map.ItemMap;
 import nro.models.player.Player;
 import nro.server.io.Message;
 import nro.services.MobService;
@@ -19,10 +20,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * 
- */
 public class Hirudegarn extends BigBoss {
 
     private byte type;
@@ -51,7 +48,7 @@ public class Hirudegarn extends BigBoss {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return list;
     }
@@ -79,8 +76,8 @@ public class Hirudegarn extends BigBoss {
             ds.writeByte(type);
             ds.writeByte(array.length);
             for (long[] arr : array) {
-                ds.writeLong(arr[0]);
-                ds.writeLong(arr[1]);
+                ds.writeInt((int) arr[0]);
+                ds.writeInt((int) arr[1]);
             }
             ds.flush();
             Service.getInstance().sendMessAllPlayerInMap(zone, ms);
@@ -98,7 +95,8 @@ public class Hirudegarn extends BigBoss {
             if (rd == 0) {
                 jump();
             } else if (rd == 1) {
-                flyTo(Util.nextInt(30, zone.map.mapWidth - 30), 360);
+                Player pl = getPlayerCanAttack();
+                flyTo(pl.location.x, 360);
             } else {
                 super.attackPlayer();
             }
@@ -106,7 +104,8 @@ public class Hirudegarn extends BigBoss {
         if (Util.canDoWithTime(lastTimeMove, 2000)) {
             int rd = Util.nextInt(3);
             if (rd == 0) {
-                move(Util.nextInt(30, zone.map.mapWidth - 30), 360);
+                Player pl = getPlayerCanAttack();
+                move(pl.location.x, 360);
             }
             lastTimeMove = System.currentTimeMillis();
         }
@@ -136,6 +135,15 @@ public class Hirudegarn extends BigBoss {
 
     }
 
+    void dropTrungMabu(Player plKill) {
+        int[] rate= {15,25,50};
+        if(Util.isTrue(rate[this.type], 100)){
+            ItemMap itm = new ItemMap(this.zone, 568, 1, this.location.x, this.zone.map.yPhysicInTop(this.location.x, this.location.y-24), plKill.id);
+            Service.getInstance().dropItemMap(this.zone, itm);
+        }
+    }
+
+
     public void transform() {
         try {
             this.type++;
@@ -158,7 +166,7 @@ public class Hirudegarn extends BigBoss {
             Service.getInstance().sendMessAllPlayerInMap(zone, ms);
             ms.cleanup();
         } catch (IOException ex) {
-            Logger.getLogger(Hirudegarn.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -174,7 +182,7 @@ public class Hirudegarn extends BigBoss {
             Service.getInstance().sendMessAllPlayerInMap(zone, ms);
             ms.cleanup();
         } catch (IOException ex) {
-            Logger.getLogger(Hirudegarn.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -191,7 +199,7 @@ public class Hirudegarn extends BigBoss {
             Service.getInstance().sendMessAllPlayerInMap(zone, ms);
             ms.cleanup();
         } catch (IOException ex) {
-            Logger.getLogger(Hirudegarn.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -205,15 +213,19 @@ public class Hirudegarn extends BigBoss {
 
     @Override
     public synchronized void injured(Player plAtt, long damage, boolean dieWhenHpFull) {
-        damage /= 2;
-        long max = this.point.hp / ((this.type + 1) * 20);
-        if (max <= 0) {
-            max = 1;
-        }
-        if (damage > max) {
-            damage = max;
-        }
+        // damage /= 2;
+        // long max = this.point.hp / ((this.type + 1) * 20);
+        // if (max <= 0) {
+        // max = 1;
+        // }
+        // if (damage > max) {
+        // damage = max;
+        // }
         super.injured(plAtt, damage, dieWhenHpFull);
+        if (this.isDie()) {
+            dropTrungMabu(plAtt);
+            return;
+        }
     }
 
 }

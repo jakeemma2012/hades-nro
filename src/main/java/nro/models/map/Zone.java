@@ -35,7 +35,7 @@ public class Zone {
     public final List<Mob> mobs;
     private final List<Player> humanoids; // player, boss, pet
     private final List<Player> notBosses; // player, pet
-    private final List<Player> players; // player
+    public final List<Player> players; // player
     private final List<Player> bosses; // boss
     private final List<Player> pets; // pet
     private final List<Player> minipets; // minpet
@@ -201,6 +201,18 @@ public class Zone {
         return this.notBosses;
     }
 
+    public Player findPlayerInMapI(long plId){
+        synchronized(this.players){
+            int i;
+            for(i = 0 ; i < this.players.size();i++){
+                Player pl = this.players.get(i);
+                if(pl != null && pl.id == plId){
+                    return pl;
+                }
+            }
+        }
+        return null;
+    }
     public List<Player> getPlayers() {
         return this.players;
     }
@@ -497,6 +509,15 @@ public class Zone {
         }
     }
 
+
+    public Player getRandomPlayerInMapNotMiniPet() {
+        return this.notBosses.stream()
+                .filter(p -> !p.isBoss)
+                .findAny()
+                .orElse(null);
+    }
+
+
     public Player getRandomPlayerInMap(List<Player> players) {
         List<Player> playerList = new ArrayList<>();
 
@@ -506,13 +527,32 @@ public class Zone {
                 playerList.add(player);
             }
         }
-
         if (!playerList.isEmpty()) {
             return playerList.get(Util.nextInt(0, playerList.size() - 1));
         } else {
             return null;
         }
     }
+
+    public Player getRandomPlayerMapNotMinipet(List<Player> players) {
+        List<Player> playerList = new ArrayList<>();
+
+        for (Player player : players) {
+            if (player != null && player.zone != null && player.zone.map.mapId == this.map.mapId
+                    && player.zone.zoneId == this.zoneId && !player.isMiniPet && !playerList.contains(player)) {
+                playerList.add(player);
+            }
+        }
+        if (!playerList.isEmpty()) {
+            return playerList.get(Util.nextInt(0, playerList.size() - 1));
+        } else {
+            return null;
+        }
+    }
+
+
+
+
 
     public Player getPlayerInMap(long id) {
         if (!this.notBosses.isEmpty()) {

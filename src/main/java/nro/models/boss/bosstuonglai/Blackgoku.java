@@ -1,6 +1,9 @@
 package nro.models.boss.bosstuonglai;
 
+
+
 import nro.consts.ConstRatio;
+
 import nro.models.boss.Boss;
 import nro.models.boss.BossData;
 import nro.models.boss.BossFactory;
@@ -117,7 +120,7 @@ public class Blackgoku extends Boss {
         } else {
             this.targetCountChangePlayerAttack = Util.nextInt(10, 20);
             this.countChangePlayerAttack = 0;
-            plAttack = this.zone.getRandomPlayerInMap();
+            plAttack = this.zone.getRandomPlayerInMapNotMiniPet();
         }
         return plAttack;
     }

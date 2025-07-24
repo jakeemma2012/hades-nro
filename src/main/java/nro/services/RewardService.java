@@ -1220,6 +1220,16 @@ public class RewardService {
         }
     }
 
+    public void initExactlyActivationOption(int gender, int type, List<ItemOption> list) {
+        if (type <= 4) {
+            int[] idOption = ACTIVATION_SET[gender][type];
+            list.add(new ItemOption(idOption[0], 1)); // tên set
+            list.add(new ItemOption(idOption[1], 1)); // hiệu ứng set
+            list.add(new ItemOption(30, 7)); // không thể giao dịch
+        }
+    }
+
+
     public static Item randomCS_DHD(int itemId, int gender) {
         Item it = ItemService.gI().createItemSetKichHoat(itemId, 1);
         List<Integer> ao = Arrays.asList(555, 557, 559);

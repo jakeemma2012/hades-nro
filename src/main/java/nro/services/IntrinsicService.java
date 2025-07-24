@@ -114,7 +114,7 @@ public class IntrinsicService {
 
     public void showConfirmOpenVip(Player player) {
         NpcService.gI().createMenuConMeo(player, ConstNpc.CONFIRM_OPEN_INTRINSIC_VIP, -1,
-                "Bạn có muốn mở Nội Tại\nvới giá là 1 thỏi vàng không ?", "Mở\nNội VIP", "Từ chối");
+                "Bạn có muốn mở Nội Tại\nvới giá là 100 Ngọc không ?", "Mở\n Nội Tại\n VIP", "Từ chối");
     }
 
     public void changeIntrinsic(Player player) {
@@ -152,15 +152,12 @@ public class IntrinsicService {
 
     public void openVip(Player player) {
         if (player.nPoint.power >= 10000000000L) {
-
-            Item tv = InventoryService.gI().findItemBag(player, 457);
-            if (tv != null && tv.quantity >= 1) {
-                InventoryService.gI().subQuantityItemsBag(player, tv, 1);
-                InventoryService.gI().sendItemBags(player);
+            if(player.inventory.gem >= 100){
                 changeIntrinsic(player);
+                Service.getInstance().sendMoney(player);
                 player.playerIntrinsic.countOpen = 0;
             } else {
-                Service.getInstance().sendThongBao(player, "Không có thỏi vàng");
+                Service.getInstance().sendThongBao(player, "Còn thiếu " + (100 - player.inventory.gem) + " ngọc nữa ");
             }
 
         } else {

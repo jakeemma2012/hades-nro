@@ -583,7 +583,7 @@ public abstract class Boss extends Player implements BossInterface {
                 this.targetCountChangePlayerAttack = Util.nextInt(10, 20);
                 this.countChangePlayerAttack = 0;
                 if (this.zone != null) {
-                    plAttack = this.zone.getRandomPlayerInMap();
+                    plAttack = this.zone.getRandomPlayerInMapNotMiniPet();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

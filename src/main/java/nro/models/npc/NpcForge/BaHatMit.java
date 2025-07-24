@@ -52,7 +52,7 @@ public class BaHatMit extends Npc {
                             "Ngươi tìm ta có việc gì?",
                             "Cửa hàng\nBùa",
                             "Nâng cấp\nVật phẩm",
-                            "Nhập\nNgọc Rồng");
+                            "Nhập\nNgọc Rồng","Nâng cấp\n Bông tai\n Cấp 2", "Mở chỉ số\n Bông tai\n Cp 2");
                     break;
             }
         }
@@ -170,6 +170,12 @@ public class BaHatMit extends Npc {
                                 CombineServiceNew.gI().openTabCombine(player,
                                         CombineServiceNew.NHAP_NGOC_RONG, this);
                                 break;
+                            case 3:
+                                CombineServiceNew.gI().openTabCombine(player,CombineServiceNew.NANG_CAP_BONG_TAI,this);
+                                break;
+                            case 4:
+                                CombineServiceNew.gI().openTabCombine(player,CombineServiceNew.MO_CHI_SO_BONG_TAI,this);
+                                break;
                         }
                     } else if (player.iDMark.getIndexMenu() == ConstNpc.MENU_OPTION_SHOP_BUA) {
                         switch (select) {
@@ -217,6 +223,7 @@ public class BaHatMit extends Npc {
                                         break;
                                 }
                                 break;
+                            case CombineServiceNew.NANG_CAP_BONG_TAI:
                             case CombineServiceNew.MO_CHI_SO_BONG_TAI:
                             case CombineServiceNew.LAM_PHEP_NHAP_DA:
                             case CombineServiceNew.NHAP_NGOC_RONG:

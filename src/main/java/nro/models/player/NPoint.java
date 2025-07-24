@@ -550,34 +550,34 @@ public class NPoint {
 
     void setPointSetClothe() {
         if (player.isPlnPet()) {
-            if (player.setClothes.setLevel7 == 5
-                    || (player.setClothes.setLevel7 == 4 && player.setClothes.setLevel8 == 1)) {
-                this.tlDame.add(10);
-                this.tlHp.add(10);
-                this.tlMp.add(10);
-            }
-            if (player.setClothes.setLevel8 == 5) {
-                this.tlDame.add(20);
-                this.tlHp.add(20);
-                this.tlMp.add(20);
-            }
-            if (player.setClothes.set7Star == 5
-                    || (player.setClothes.set7Star == 4 && player.setClothes.set8Star == 1)) {
-                this.tlDame.add(10);
-                this.tlHp.add(10);
-                this.tlMp.add(10);
-            }
-            if (player.setClothes.set8Star == 5) {
-                this.tlDame.add(20);
-                this.tlHp.add(20);
-                this.tlMp.add(20);
-            }
-            if (player.getSession() != null && player.getSession().actived) {
-                this.tlDame.add(5);
-                this.tlHp.add(5);
-                this.tlMp.add(5);
-                this.tlTNSM.add(5);
-            }
+            // if (player.setClothes.setLevel7 == 5
+            //         || (player.setClothes.setLevel7 == 4 && player.setClothes.setLevel8 == 1)) {
+            //     this.tlDame.add(10);
+            //     this.tlHp.add(10);
+            //     this.tlMp.add(10);
+            // }
+            // if (player.setClothes.setLevel8 == 5) {
+            //     this.tlDame.add(20);
+            //     this.tlHp.add(20);
+            //     this.tlMp.add(20);
+            // }
+            // if (player.setClothes.set7Star == 5
+            //         || (player.setClothes.set7Star == 4 && player.setClothes.set8Star == 1)) {
+            //     this.tlDame.add(10);
+            //     this.tlHp.add(10);
+            //     this.tlMp.add(10);
+            // }
+            // if (player.setClothes.set8Star == 5) {
+            //     this.tlDame.add(20);
+            //     this.tlHp.add(20);
+            //     this.tlMp.add(20);
+            // }
+            // if (player.getSession() != null && player.getSession().actived) {
+            //     this.tlDame.add(5);
+            //     this.tlHp.add(5);
+            //     this.tlMp.add(5);
+            //     this.tlTNSM.add(5);
+            // }
         }
     }
 
@@ -773,7 +773,7 @@ public class NPoint {
         }
 
         if (this.player.setClothes.picolo2 == 5) {
-            this.mpMax *= 2.2;
+            this.mpMax *= 3;
         }
         if (player.isPl() && player.pet != null) {
             if (player.fusion.typeFusion >= 4) {
@@ -830,9 +830,6 @@ public class NPoint {
             if (this.player.itemTime.isUseBanhTet) {
                 mpMax += calPercent(mpMax, 20);
             }
-        }
-        if (player.effectSkill.isSaiYan) {
-            mpMax += calPercent(mpMax, (5 * player.effectSkill.levelSaiYan));
         }
         if (player.itemTime.isActive(1985)) {
             mpMax += calPercent(mpMax, 20);
@@ -920,9 +917,6 @@ public class NPoint {
             if (this.player.itemTime.isUseBanhChung) {
                 dame += calPercent(dame, 20);
             }
-        }
-        if (player.effectSkill.isSaiYan) {
-            dame += calPercent(dame, (5 * player.effectSkill.levelSaiYan));
         }
         if (player.itemTime.isActive(1985)) {
             dame += calPercent(dame, 20);
@@ -1185,7 +1179,7 @@ public class NPoint {
                 }
                 long damage = ((totalHP / 10) + (this.dame * 10));
                 if (this.player.setClothes.kaioken2 == 5) {
-                    damage *= 3;
+                    damage *= 2;
                 }
                 return damage;
         }
@@ -1309,6 +1303,8 @@ public class NPoint {
         if (power < getPowerLimit()) {
             int mapid = this.player.zone.map.mapId;
             int tlexp = 0;
+            tiemNang += Manager.RATE_EXP_SERVER;
+
             for (Integer tl : this.tlTNSM) {
                 tlexp += tl;
             }
@@ -1359,16 +1355,13 @@ public class NPoint {
                 tn /= 12;
             }
             if (this.player.charms.tdTriTue > System.currentTimeMillis()) {
-                tiemNang += 100;
+                tiemNang *= 2;
             }
             if (this.player.charms.tdTriTue3 > System.currentTimeMillis()) {
-                tiemNang += 200;
+                tiemNang *= 3;
             }
             if (this.player.charms.tdTriTue4 > System.currentTimeMillis()) {
-                tiemNang += 300;
-            }
-            if (this.power >= 60000000000L) {
-                tiemNang -= (tiemNang * 80 / 100);
+                tiemNang *= 4;
             }
             if (this.player.isPet) {
                 for (Integer idItem : new ArrayList<>(((Pet) this.player).master.itemTime.isActive.keySet())) {
@@ -1386,7 +1379,6 @@ public class NPoint {
                         case 1376: // x5
                             tiemNang += tn * 4;
                             break;
-
                         case 999:
                             if (player.zone.map.mapId == 221) {
                                 tiemNang += tn * 4;
@@ -1405,17 +1397,8 @@ public class NPoint {
                 if (((Pet) this.player).master.nPoint.suphu > 0) {
                     tiemNang += ((Pet) this.player).nPoint.suphu;
                 }
-
             }
-            if (this.player.setClothes.thienXinHang1 == 5
-                    || this.player.setClothes.cadic1 == 5
-                    || this.player.setClothes.pikkoroDaimao1 == 5) {
-                tiemNang += tn * 4;
-            }
-            if (player.itemTime.isLinhLuc) {
-                tiemNang += tn * 4;
-            }
-
+            
             for (Integer idItem : new ArrayList<>(player.itemTime.isActive.keySet())) {
                 switch (idItem) {
                     //// SET TNSM
@@ -1440,7 +1423,6 @@ public class NPoint {
                         break;
                 }
             }
-            tiemNang *= Manager.RATE_EXP_SERVER;
             tiemNang = calSubTNSM(tiemNang);
             if (tiemNang <= 0) {
                 tiemNang = 1;
@@ -1452,7 +1434,7 @@ public class NPoint {
     }
 
     public long calSubTNSM(long tiemNang) {
-        if (power >= 700000000000L) {
+        if (power >= 700_000_000_000L) {
             tiemNang /= 10000000;
         } else if (power >= 600000000000L) {
             tiemNang /= 5000000;
@@ -1470,7 +1452,7 @@ public class NPoint {
             tiemNang /= 50000;
         } else if (power >= 100000000000L) {
             tiemNang /= 20000;
-        } else if (power >= 80000000000L) {
+        } else if (power >= 80_000_000_000L) {
             tiemNang -= ((long) tiemNang * 98 / 100);
         } else if (power >= 90_000_000_000L) {
             tiemNang /= 50000;
@@ -1716,9 +1698,6 @@ public class NPoint {
     }
 
     void setPST() {
-        if (this.player.setClothes.picolo1 == 5) {
-            this.player.nPoint.tlPST += 100;
-        }
     }
 
     void setItemTime() {

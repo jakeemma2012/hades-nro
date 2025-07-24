@@ -8,10 +8,6 @@ import nro.models.player.Player;
 import nro.services.MapService;
 import nro.services.Service;
 
-/**
- *
- * 
- */
 public class Tapion extends Npc {
 
     public Tapion(int mapId, int status, int cx, int cy, int tempId, int avartar) {
@@ -42,18 +38,18 @@ public class Tapion extends Npc {
                 if (player.iDMark.isBaseMenu()) {
                     switch (select) {
                         case 0:
-                            this.npcChat(player, "Chức năng tạm thời đóng ...");
-                            // SantaCity santaCity = (SantaCity) MapService.gI().getMapById(126);
-                            // if (santaCity != null) {
-                            // if (!santaCity.isOpened() || santaCity.isClosed()) {
-                            // Service.getInstance().sendThongBao(player,
-                            // "Hẹn gặp bạn lúc 22h mỗi ngày");
-                            // return;
-                            // }
-                            // santaCity.enter(player);
-                            // } else {
-                            // Service.getInstance().sendThongBao(player, "Có lỗi xảy ra!");
-                            // }
+                            // this.npcChat(player, "Chức năng tạm thời đóng ...");
+                            SantaCity santaCity = (SantaCity) MapService.gI().getMapById(126);
+                            if (santaCity != null) {
+                            if (!santaCity.isOpened() || santaCity.isClosed()) {
+                            Service.getInstance().sendThongBao(player,
+                            "Hẹn gặp bạn lúc 22h mỗi ngày");
+                            return;
+                            }
+                            santaCity.enter(player);
+                            } else {
+                            Service.getInstance().sendThongBao(player, "Có lỗi xảy ra!");
+                            }
                             break;
                     }
                 }
