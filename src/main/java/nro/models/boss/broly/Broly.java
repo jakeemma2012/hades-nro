@@ -121,11 +121,6 @@ public class Broly extends Boss {
                     Service.getInstance().chat(plAtt, "Trời ơi, chưởng hoàn toàn vô hiệu lực với hắn..");
                     damage = 0;
                 }
-                if (!(plAtt.playerSkill.skillSelect.template.id == Skill.TU_SAT || plAtt.playerSkill.skillSelect.template.id == Skill.MAKANKOSAPPO || plAtt.playerSkill.skillSelect.template.id == Skill.QUA_CAU_KENH_KHI)) {
-                    if (damage >= this.nPoint.hpMax / 100) {
-                        damage = this.nPoint.hpMax / 100;
-                    }
-                }
             }
 
             if (plAtt != null && plAtt.getSession() != null && plAtt.isAdmin()) {

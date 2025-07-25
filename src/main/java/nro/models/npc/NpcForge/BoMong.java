@@ -33,7 +33,6 @@ public class BoMong extends Npc {
                 if (player.iDMark.isBaseMenu()) {
                     switch (select) {
                         case 0:
-
                             // this.createOtherMenu(player, ConstNpc.MENU_OPTION_PHU_HP,
                             // "Ta sẽ giúp ngươi tăng HP lên mức kinh hoàng, ngươi chọn đi",
                             // "x3 HP\n" + Util.numberToMoney(BlackBallWar.COST_X3) + " vàng",

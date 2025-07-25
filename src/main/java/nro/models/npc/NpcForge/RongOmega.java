@@ -28,7 +28,7 @@ public class RongOmega extends Npc {
                         this.createOtherMenu(player, ConstNpc.MENU_OPEN_BDW,
                                 "Đường đến với ngọc rồng sao đen đã mở, "
                                         + "ngươi có muốn tham gia không?",
-                                "Hướng dẫn\nthêm", "Tham gia", "Giải đất\n Ngọc rồng", "Từ chối");
+                                "Hướng dẫn\nthêm", "Tham gia", "Từ chối");
                     } else {
                         String[] optionRewards = new String[7];
                         int index = 0;
@@ -50,7 +50,7 @@ public class RongOmega extends Npc {
                                     options);
                         } else {
                             this.createOtherMenu(player, ConstNpc.MENU_NOT_OPEN_BDW,
-                                    "Ta có thể giúp gì cho ngươi?", "Hướng dẫn", "Giải đấu\n ngọc rồng", "Từ chối");
+                                    "Ta có thể giúp gì cho ngươi?", "Hướng dẫn", "Từ chối");
                         }
                     }
                 } catch (Exception ex) {

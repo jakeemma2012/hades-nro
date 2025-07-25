@@ -35,9 +35,6 @@ import nro.models.boss.BossManager;
 import nro.models.npc.specialnpc.EggLinhThu;
 import nro.models.npc.specialnpc.MabuEgg;
 
-/**
- *
- */
 public class UseItem {
 
     private static final int ITEM_BOX_TO_BODY_OR_BAG = 0;
@@ -276,6 +273,9 @@ public class UseItem {
                     break;
                 default:
                     switch (item.template.id) {
+                        case 1173:
+                            OpenTuiThienSu(pl, item);
+                            break;
                         case 457:
                             UseItem.gI().UseThoiVang(pl);
                             break;
@@ -681,34 +681,34 @@ public class UseItem {
         final Inventory inventory = pl.inventory;
         MenuDialog menu = new MenuDialog(sb.toString(),
                 new String[]{"Đến ngay\nViên " + (star + 1) + " Sao\n 50tr Vàng",
-                        "Đến ngay\nViên " + (star + 1) + " Sao\n 5 Hồng ngọc"},
+                    "Đến ngay\nViên " + (star + 1) + " Sao\n 5 Hồng ngọc"},
                 new MenuRunable() {
-                    @Override
-                    public void run() {
-                        switch (getIndexSelected()) {
-                            case 0:
-                                if (inventory.gold < 50000000) {
-                                    Service.getInstance().sendThongBao(pl, "Không đủ tiền");
-                                    return;
-                                }
-                                inventory.subGold(50000000);
-                                ChangeMapService.gI().changeMap(pl, ball.zone, ball.x, ball.y);
-                                break;
-                            case 1:
-                                if (inventory.ruby < 5) {
-                                    Service.getInstance().sendThongBao(pl, "Không đủ tiền");
-                                    return;
-                                }
-                                inventory.subRuby(5);
-                                ChangeMapService.gI().changeMap(pl, ball.zone, ball.x, ball.y);
-                                break;
+            @Override
+            public void run() {
+                switch (getIndexSelected()) {
+                    case 0:
+                        if (inventory.gold < 50000000) {
+                            Service.getInstance().sendThongBao(pl, "Không đủ tiền");
+                            return;
                         }
-                        if (pl.isHoldNamecBall) {
-                            NamekBallWar.gI().dropBall(pl);
+                        inventory.subGold(50000000);
+                        ChangeMapService.gI().changeMap(pl, ball.zone, ball.x, ball.y);
+                        break;
+                    case 1:
+                        if (inventory.ruby < 5) {
+                            Service.getInstance().sendThongBao(pl, "Không đủ tiền");
+                            return;
                         }
-                        Service.getInstance().sendMoney(pl);
-                    }
-                });
+                        inventory.subRuby(5);
+                        ChangeMapService.gI().changeMap(pl, ball.zone, ball.x, ball.y);
+                        break;
+                }
+                if (pl.isHoldNamecBall) {
+                    NamekBallWar.gI().dropBall(pl);
+                }
+                Service.getInstance().sendMoney(pl);
+            }
+        });
         menu.show(pl);
         InventoryService.gI().sendItemBags(pl);
         InventoryService.gI().subQuantityItemsBag(pl, item, 1);
@@ -947,8 +947,8 @@ public class UseItem {
                 RewardService.gI().initBaseOptionClothes(itemReward.template.id, itemReward.template.type,
                         itemReward.itemOptions);
                 RewardService.gI().initStarOption(itemReward, new RewardService.RatioStar[]{
-                        new RewardService.RatioStar((byte) 1, 1, 2), new RewardService.RatioStar((byte) 2, 1, 3),
-                        new RewardService.RatioStar((byte) 3, 1, 4), new RewardService.RatioStar((byte) 4, 1, 5),});
+                    new RewardService.RatioStar((byte) 1, 1, 2), new RewardService.RatioStar((byte) 2, 1, 3),
+                    new RewardService.RatioStar((byte) 3, 1, 4), new RewardService.RatioStar((byte) 4, 1, 5),});
                 InventoryService.gI().addItemBag(pl, itemReward, 0);
                 pl.textRuongGo.add(text + itemReward.getInfoItem());
             }
@@ -1165,7 +1165,7 @@ public class UseItem {
     private void capsule8thang3(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
             short[] temp = {17, 16, 675, 676, 677, 678, 679, 680, 681, 580, 581, 582, 1154, 1155, 1156, 860, 1041,
-                    1042, 1043, 954, 955};
+                1042, 1043, 954, 955};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
             icon[0] = item.template.iconID;
@@ -1432,7 +1432,7 @@ public class UseItem {
                                 Service.getInstance().sendThongBao(pl, "Bạn nhận được " + ruby + " Hồng Ngọc");
                             } else {
                                 int[] temp = {spl, dnc, nr, nrBang, 387, 390, 393, 821, 822, 746, 380, 999, 1000, 1001,
-                                        936, 2022};
+                                    936, 2022};
                                 byte index = (byte) Util.nextInt(0, temp.length - 1);
                                 short[] icon = new short[2];
                                 icon[0] = item.template.iconID;
@@ -1902,7 +1902,7 @@ public class UseItem {
     private void openboxkichhoat(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
             short[] temp = {76, 188, 189, 190, 441, 442, 447, 2010, 2009, 865, 938, 939, 940, 16, 17, 18, 19, 20, 946,
-                    947, 948, 382, 383, 384, 385};
+                947, 948, 382, 383, 384, 385};
             int[][] gold = {{5000, 20000}};
             byte index = (byte) Util.nextInt(0, temp.length - 1);
             short[] icon = new short[2];
@@ -3233,8 +3233,8 @@ public class UseItem {
     }
 
     String skhch[][] = {{"Sét\nKirin", "Sét\nSongoku", "Sét\nThiên xin hăng"},
-            {"Sét\nPicolo", "Sét\nLiên hoàn", "Sét\nĐẻ trứng"},
-            {"Sét\n Kakarot", "Sét\n Cadic", "Sét\nNapan"}};
+    {"Sét\nPicolo", "Sét\nLiên hoàn", "Sét\nĐẻ trứng"},
+    {"Sét\n Kakarot", "Sét\n Cadic", "Sét\nNapan"}};
 
     public void UseHopThanLinh1400(Player player, int type) {
         if (type == -1) {
@@ -3724,25 +3724,35 @@ public class UseItem {
         }
     }
 
-
-
-    public void handleBanVang(Player player, int index){
-        if(player != null){
-            int[] sl = {1,10,20};
-            if(InventoryService.gI().getQuantity(player,457) >= sl[index]){
-                if(player.inventory.gold + (500_000_000L * sl[index]) < Inventory.LIMIT_GOLD ){
+    public void handleBanVang(Player player, int index) {
+        if (player != null) {
+            int[] sl = {1, 10, 20};
+            if (InventoryService.gI().getQuantity(player, 457) >= sl[index]) {
+                if (player.inventory.gold + (500_000_000L * sl[index]) < Inventory.LIMIT_GOLD) {
                     InventoryService.gI().subQuantityItemsBag(player, 457, sl[index]);
                     InventoryService.gI().sendItemBags(player);
                     player.inventory.gold += (500_000_000L * sl[index]);
-                    Service.getInstance().sendThongBao(player,"Bán thành công x" + sl[index] + " thành " + Util.numberToMoney(500_000_000L * sl[index]));
+                    Service.getInstance().sendThongBao(player, "Bán thành công x" + sl[index] + " thành " + Util.numberToMoney(500_000_000L * sl[index]));
                     PlayerService.gI().sendInfoHpMpMoney(player);
                 } else {
-                    Service.getInstance().sendThongBao(player,"Lượng vàng sau khi bán vượt quá giới hạn " + (Util.numberToMoney(Inventory.LIMIT_GOLD)) + " vàng");
+                    Service.getInstance().sendThongBao(player, "Lượng vàng sau khi bán vượt quá giới hạn " + (Util.numberToMoney(Inventory.LIMIT_GOLD)) + " vàng");
                 }
             } else {
-                Service.getInstance().sendThongBao(player,"Hãy đảm bảo bạn có đủ số lượng vàng để bán !");
+                Service.getInstance().sendThongBao(player, "Hãy đảm bảo bạn có đủ số lượng vàng để bán !");
             }
 
+        }
+    }
+
+    public void OpenTuiThienSu(Player player, Item item) {
+        if (InventoryService.gI().getCountEmptyBag(player) > 0) {
+            Item vp = ItemService.gI().createNewItem((short) Util.nextInt(1066, 1070), Util.nextInt(1, 3));
+            InventoryService.gI().addItemBag(player, vp, 9999);
+            InventoryService.gI().subQuantityItemsBody(player, item, 1);
+            CombineServiceNew.gI().sendEffectOpenItem(player, item.template.iconID, vp.template.iconID);
+            InventoryService.gI().sendItemBags(player);
+        } else {
+            Service.getInstance().sendThongBao(player, "Hành trang đã đầy !");
         }
     }
 

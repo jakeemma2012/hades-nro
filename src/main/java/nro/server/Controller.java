@@ -663,7 +663,8 @@ public class Controller {
     }
 
     public void login2(Session session, Message msg) {
-        Service.getInstance().switchToRegisterScr(session);
+        // Service.getInstance().switchToRegisterScr(session);
+        Service.getInstance().sendThongBaoOK(session, "Vui lòng đăng kí tại trang chủ game !");
     }
 
     public void sendInfo(Session session) {

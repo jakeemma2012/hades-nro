@@ -589,8 +589,8 @@ public class Service {
                     for (int i = 0; i < 5; i++) {
                         Item vp = ItemService.gI().createNewItem(ConstItem.doSKHVip[i][gender][lv]);
                         RewardService.gI().initBaseOptionClothes(vp);
-                        if(kh != -1){
-                            RewardService.gI().initExactlyActivationOption(gender, kh,vp.itemOptions);
+                        if (kh != -1) {
+                            RewardService.gI().initExactlyActivationOption(gender, kh, vp.itemOptions);
                         }
                         InventoryService.gI().addItemBag(player, vp, 1);
                         InventoryService.gI().sendItemBags(player);
@@ -1519,7 +1519,7 @@ public class Service {
                     pl.inventory.subGem(5);
                     sendMoney(pl);
                     pl.lastTimeChatGlobal = System.currentTimeMillis();
-                    Message msg;
+                    Message msg = null;
                     try {
                         msg = new Message(92);
                         msg.writer().writeUTF(pl.name);
@@ -1531,8 +1531,11 @@ public class Service {
                         msg.writer().writeShort(pl.getLeg());
                         msg.writer().writeByte(0);
                         sendMessAllPlayer(msg);
-                        msg.cleanup();
                     } catch (Exception e) {
+                    } finally {
+                        if (msg != null) {
+                            msg.cleanup();
+                        }
                     }
                 } else {
                     sendThongBao(pl, "Sức mạnh phải ít nhất 2tỷ mới có thể chat thế giới");
@@ -1560,7 +1563,7 @@ public class Service {
     public static final int[] flagIconId = { 2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325 };
 
     public void openFlagUI(Player pl) {
-        Message msg;
+        Message msg = null;
         try {
             msg = new Message(-103);
             msg.writer().writeByte(0);
@@ -1584,8 +1587,11 @@ public class Service {
                 }
             }
             pl.sendMessage(msg);
-            msg.cleanup();
         } catch (Exception e) {
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
         }
     }
 
@@ -1677,7 +1683,7 @@ public class Service {
             sendThongBaoOK(pl, "Không thể đổi khu vực trong map này");
             return;
         }
-        Message msg;
+        Message msg = null;
         try {
             msg = new Message(29);
             msg.writer().writeByte(pl.zone.map.zones.size());
@@ -1690,51 +1696,51 @@ public class Service {
                 msg.writer().writeByte(0);
             }
             pl.sendMessage(msg);
-            msg.cleanup();
         } catch (Exception e) {
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
         }
     }
 
     public void releaseCooldownSkill(Player pl) {
-        Message msg;
+        Message msg = null;
         try {
             msg = new Message(-94);
             for (Skill skill : pl.playerSkill.skills) {
-                skill.coolDown = 0;
                 msg.writer().writeShort(skill.skillId);
-                int leftTime = (int) (skill.lastTimeUseThisSkill + skill.coolDown - System.currentTimeMillis());
-                if (leftTime < 0) {
-                    leftTime = 0;
-                }
-                msg.writer().writeInt(leftTime);
+                msg.writer().writeInt(0);
             }
             pl.sendMessage(msg);
             pl.nPoint.setMp(pl.nPoint.mpMax);
             PlayerService.gI().sendInfoHpMpMoney(pl);
             msg.cleanup();
-
         } catch (Exception e) {
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
         }
     }
 
     public void sendTimeSkill(Player pl) {
-        Message msg;
+        Message msg = null;
         try {
             msg = new Message(-94);
             for (Skill skill : pl.playerSkill.skills) {
                 msg.writer().writeShort(skill.skillId);
-                int timeLeft = Math.max(0,
-                        skill.coolDown - (int) (System.currentTimeMillis() - skill.lastTimeUseThisSkill));
-                if (timeLeft < 0) {
-                    timeLeft = 0;
-                }
+                int timeLeft = (int) Math.max(0,
+                        skill.lastTimeUseThisSkill - System.currentTimeMillis());
                 msg.writer().writeInt(timeLeft);
-
             }
             pl.sendMessage(msg);
-            msg.cleanup();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (msg != null) {
+                msg.cleanup();
+            }
         }
     }
 

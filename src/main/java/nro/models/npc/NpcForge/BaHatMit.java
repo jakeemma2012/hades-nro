@@ -52,7 +52,7 @@ public class BaHatMit extends Npc {
                             "Ngươi tìm ta có việc gì?",
                             "Cửa hàng\nBùa",
                             "Nâng cấp\nVật phẩm",
-                            "Nhập\nNgọc Rồng","Nâng cấp\n Bông tai\n Cấp 2", "Mở chỉ số\n Bông tai\n Cp 2");
+                            "Nhập\nNgọc Rồng","Nâng cấp\n Bông tai\n Cấp 2", "Mở chỉ số\n Bông tai\n Cấp 2");
                     break;
             }
         }

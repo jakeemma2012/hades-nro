@@ -833,6 +833,7 @@ public class SummonDragon {
                     case 0:
                         playerSummonShenron.itemTime.setActiveTime(1985, 30, true);
                         ItemTimeService.gI().sendAllItemTime(playerSummonShenron);
+                        Service.getInstance().point(playerSummonShenron);
                         isToronboAppear = false;
                         Service.getInstance().RemoveEffPlayer(playerSummonShenron,51);
                         break;

@@ -89,7 +89,6 @@ public class PlayerService {
             }
         }
         msg.cleanup();
-
     }
 
     public void sendMessageIgnore(Player plIgnore, Message msg) {
